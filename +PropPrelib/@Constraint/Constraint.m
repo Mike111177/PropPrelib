@@ -34,7 +34,7 @@ classdef Constraint
         G('G - Takeoff', NaN),
         H('H - Landing (No obstacle)', NaN),
         I('I - Landing', NaN),
-        J('J - Acceleration Time', NaN),
+        J('J - Acceleration Time', @HorizontalAcceleration),
         K('K - Takeoff Climb Angle', NaN),
         L('L - Carrier Takeoff', NaN),
         M('M - Carrier Landing', NaN),
