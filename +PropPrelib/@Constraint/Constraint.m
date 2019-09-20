@@ -25,9 +25,9 @@ classdef Constraint
         end
     end
     enumeration
-        A('A - Constant Altitude/Speed Cruise', NaN),
-        B('B - Constant Speed Climb', NaN),
-        C('C - Constant Altitude/Speed Turn', NaN),
+        A('A - Constant Altitude/Speed Cruise', @ConstantAltitudeSpeedCruise),
+        B('B - Constant Speed Climb', @ConstantSpeedClimb),
+        C('C - Constant Altitude/Speed Turn', @ConstantAltitudeSpeedTurn),
         D('D - Horizontal Acceleration', @HorizontalAcceleration),
         E('E - Service Ceiling', NaN),
         F('F - Takeoff (No obstacle)', NaN),

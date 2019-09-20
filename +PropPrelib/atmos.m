@@ -1,13 +1,17 @@
-function [T, a, P, rho] = atmos( h )
+function [T, a, P, rho] = atmos( h, model )
 import PropPrelib.*
 import PropPrelib.unitsystem.*
-usys = units;
 
+if nargin == 1
+    model = atmodel;
+end
+
+usys = units;
 if usys == UnitSystem_e.BE
     h = h * 0.3048; %Feet to Meters
 end
 
-[T, a, P, rho] = atmosisa(h);
+[T, a, P, rho] = atmoslapse(h, model.modeldata{:});
 
 if usys == UnitSystem_e.BE
     T = T * 1.8; %Kelvin to Rankine

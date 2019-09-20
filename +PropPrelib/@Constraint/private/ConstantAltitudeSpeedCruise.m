@@ -1,23 +1,19 @@
-function TL = HorizontalAcceleration(varargin)
-% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'M1', M1, 'M2', M2) 
+function TL = ConstantAltitudeSpeedCruise(varargin)
+% CONSTANTALTITUDESPEEDCRUISE('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M) 
 % calculates wingloading with default max thrust model.
 % 
-% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'M1', M1, 'M2', M2, 'Throttle', 'max') 
+% CONSTANTALTITUDESPEEDCRUISE('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'Throttle', 'max') 
 % calculates wingloading with max thrust model.
 %
-% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'M1', M1, 'M2', M2, 'Throttle', 'mil') 
+% CONSTANTALTITUDESPEEDCRUISE('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'Throttle', 'mil') 
 % calculates wingloading with millitary thrust model.
 %
 %   TODO: make work with any thrust percentage.
-[WL,beta,TR,alt,dt,M1,M2,Throttle] = parsevars(varargin);
+[WL,beta,TR,alt,M,Throttle] = parsevars(varargin);
 
 import PropPrelib.* 
 
-[T, a, P] = atmos(alt);
-
-dV = a.*(M2-M1);
-M = mean([M1, M2]);
- 
+[T, a, P] = atmos(alt); 
 q = dynamic_pressure(P, M);
 [theta, delta] = atmos_nondimensional(alt);
 [theta_0, delta_0] = adjust_atmos(theta, delta, M);
@@ -34,11 +30,11 @@ end
 CDR = 0;
 K2 = 0;
 
-%EQ 2.18a
-TL = beta./alpha.*(K1.*beta./q.*WL+K2+(CD0+CDR)./(beta./q)./WL+1./g0.*dV./dt);
+%EQ 2.12
+TL = beta./alpha.*(K1.*beta./q.*WL+K2+(CD0+CDR)./(beta./q)./WL);
 end
 
-function [WL,beta,TR,alt,dt,M1,M2,Throttle] = parsevars(vars)
+function [WL,beta,TR,alt,M,Throttle] = parsevars(vars)
 import PropPrelib.RequiredArg
 persistent p
 if isempty(p)
@@ -47,9 +43,7 @@ if isempty(p)
     addParameter(p, 'beta' , RequiredArg, @isnumeric);
     addParameter(p, 'TR'   , RequiredArg, @isnumeric);
     addParameter(p, 'alt'  , RequiredArg, @isnumeric);
-    addParameter(p, 'dt'   , RequiredArg, @isnumeric);
-    addParameter(p, 'M1'   , RequiredArg, @isnumeric);
-    addParameter(p, 'M2'   , RequiredArg, @isnumeric);
+    addParameter(p, 'M'   , RequiredArg, @isnumeric);
     addParameter(p, 'Throttle', 'max');
 end
 
@@ -63,9 +57,7 @@ WL = arg.WL;
 beta = arg.beta;
 TR = arg.TR;
 alt = arg.alt;
-dt = arg.dt;
-M1 = arg.M1;
-M2 = arg.M2;
+M = arg.M;
 Throttle = arg.Throttle;
 end
 
