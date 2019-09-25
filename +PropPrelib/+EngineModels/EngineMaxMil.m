@@ -11,9 +11,9 @@ classdef EngineMaxMil < PropPrelib.Engine
         end
         function lapse = thrustLapse(e, varargin)
             [AB, other] = parsevars(varargin);
-            lapseMax = e.subModel(1).thrustLapse(other);
-            lapseMil = e.subModel(0).thrustLapse(other);
-            lapse = interp1([0, 1], [lapseMil, lapseMax], AB);
+            lapseMax = e.mMax.thrustLapse(other);
+            lapseMil = e.mMil.thrustLapse(other);
+            lapse = lapseMil + AB.*(lapseMax - lapseMil);
         end
         function tfsc = tfsc(e, varargin)
             [AB, other] = parsevars(varargin);
@@ -37,15 +37,15 @@ end
 
 
 function [AB, other] = parsevars(vars)
-    import PropPrelib.RequiredArg
+    import PropPrelib.*
     persistent p
     if isempty(p)
-        p = inputParser;
+        p = ArgParser;
         p.KeepUnmatched = true;
         addParameter(p, 'AB', RequiredArg);
     end
     try
-        [arg, other] = RequiredArg.check(p, vars);
+        [arg, other] = parse(p, vars{:});
     catch ME
         throwAsCaller(ME)
     end   

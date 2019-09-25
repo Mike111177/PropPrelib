@@ -41,10 +41,10 @@ function [PI, stats] = CASTInt(beta, WLto, TLto, alt, M, TR, n, Turns, CDR)
 end
 
 function [beta, WLto, TLto, alt, M, TR, n, Turns, CDR, Intervals] = parsevars(vars)
-import PropPrelib.RequiredArg
+import PropPrelib.*
 persistent p
 if isempty(p)
-    p = inputParser;
+    p = ArgParser;
     addParameter(p, 'beta', RequiredArg, @isnumeric);
     addParameter(p, 'WLto', RequiredArg, @isnumeric);
     addParameter(p, 'TLto', RequiredArg, @isnumeric);
@@ -58,7 +58,7 @@ if isempty(p)
 end
 
 try
-    arg = RequiredArg.check(p, vars);
+    arg = parse(p, vars{:});
 catch ME
     throwAsCaller(ME)
 end   

@@ -5,10 +5,10 @@ function tfsc = tfsc_simple(varargin)
 end 
 
 function [theta, M0, C1, C2] = parsevars(vars)
-    import PropPrelib.RequiredArg
+    import PropPrelib.*
     persistent p
     if isempty(p)
-        p = inputParser;
+        p = ArgParser;
         addParameter(p, 'theta'  , RequiredArg, @isnumeric);
         addParameter(p, 'M0'   , RequiredArg, @isnumeric);
         addParameter(p, 'C1', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
@@ -16,7 +16,7 @@ function [theta, M0, C1, C2] = parsevars(vars)
     end
 
     try
-        arg = RequiredArg.check(p, vars);
+        arg = parse(p, vars{:});
     catch ME
         throwAsCaller(ME)
     end   

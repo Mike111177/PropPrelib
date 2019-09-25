@@ -37,10 +37,10 @@ TL = beta./alpha.*(K1.*beta./q.*WL+K2+(CD0+CDR)./(beta./q)./WL+1./V.*dh./dt);
 end
 
 function [WL,beta,TR,alt1,alt2,dt,M,AB] = parsevars(vars)
-import PropPrelib.RequiredArg
+import PropPrelib.*
 persistent p
 if isempty(p)
-    p = inputParser;
+    p = ArgParser;
     addParameter(p, 'WL'   , RequiredArg, @isnumeric);
     addParameter(p, 'beta' , RequiredArg, @isnumeric);
     addParameter(p, 'TR'   , RequiredArg, @isnumeric);
@@ -52,7 +52,7 @@ if isempty(p)
 end
 
 try
-    arg = RequiredArg.check(p, vars);
+    arg = parse(p, vars{:});
 catch ME
     throwAsCaller(ME)
 end   

@@ -10,7 +10,9 @@ classdef EngineSimple < PropPrelib.Engine
                 e.ctfsc.C1, e.ctfsc.C2] = parseconstants(varargin);
         end
         function lapse = thrustLapse(e, varargin)
-            lapse = thrust_lapse_simple(varargin{:}, e.cthrust);
+            [theta_0, delta_0, TR] = parsetl(varargin);
+            lapse = thrust_lapse_simple(theta_0, delta_0, TR,...
+                                            e.cthrust.A, e.cthrust.B, e.cthrust.C, e.cthrust.D);
         end
         function tfsc = tfsc(e, varargin)
             tfsc = tfsc_simple(varargin{:}, e.ctfsc);
@@ -19,10 +21,10 @@ classdef EngineSimple < PropPrelib.Engine
 end
 
 function [A, B, C, D, C1, C2] = parseconstants(vars)
-import PropPrelib.RequiredArg
+import PropPrelib.*
 persistent p
 if isempty(p)
-    p = inputParser;
+    p = ArgParser;
     addParameter(p, 'A', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
     addParameter(p, 'B', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
     addParameter(p, 'C', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
@@ -32,7 +34,7 @@ if isempty(p)
 end
 
 try
-    arg = RequiredArg.check(p, vars);
+    arg = parse(p, vars{:});
 catch ME
     throwAsCaller(ME)
 end   
@@ -43,4 +45,25 @@ C = arg.C;
 D = arg.D;
 C1 = arg.C1;
 C2 = arg.C2;
+end
+
+function [theta_0, delta_0, TR] = parsetl(vars)
+    import PropPrelib.*
+    persistent p
+    if isempty(p)
+        p = ArgParser;
+        addParameter(p, 'theta_0', RequiredArg, @isnumeric);
+        addParameter(p, 'delta_0', RequiredArg, @isnumeric);
+        addParameter(p, 'TR', RequiredArg, @isnumeric)
+    end
+
+    try
+        arg = parse(p, vars{:});
+    catch ME
+        throwAsCaller(ME)
+    end   
+
+    theta_0 = arg.theta_0;
+    delta_0 = arg.delta_0;
+    TR = arg.TR;
 end
