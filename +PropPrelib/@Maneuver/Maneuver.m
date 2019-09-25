@@ -10,12 +10,11 @@ classdef Maneuver
             c.name = name;
             c.func = f;
         end
-        function res = subsref(c, args)
+        function [res, varargout] = subsref(c, args)
             switch(args.type)
                 case '()'
                     if isa(c.func,'function_handle')
-                        PI = c.func(args.subs{:});
-                        res = PI;
+                        [res, varargout{1}] = c.func(args.subs{:});
                     else
                         error(['This maneuver is not implemented yet!: ' c.name]);
                     end

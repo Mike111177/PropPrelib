@@ -13,13 +13,13 @@ classdef EngineMaxMil < PropPrelib.Engine
             [AB, other] = parsevars(varargin);
             lapseMax = e.subModel(1).thrustLapse(other);
             lapseMil = e.subModel(0).thrustLapse(other);
-            lapse = interp1([0, 1], [lapseMax, lapseMil], AB);
+            lapse = interp1([0, 1], [lapseMil, lapseMax], AB);
         end
         function tfsc = tfsc(e, varargin)
             [AB, other] = parsevars(varargin);
             tfscMax = e.subModel(1).tfsc(other);
             tfscMil = e.subModel(0).tfsc(other);
-            tfsc = interp1([0, 1], [tfscMax, tfscMil], AB);
+            tfsc = interp1([0, 1], [tfscMil, tfscMax], AB);
         end
     end
     methods (Access = private)
