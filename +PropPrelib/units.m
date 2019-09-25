@@ -1,10 +1,10 @@
 function system = units(unittype)
-import PropPrelib.unitsystem.*
+import PropPrelib.*
 global UNIT_SYSTEM;
 if nargin == 1
-    UNIT_SYSTEM = UnitSystem_e(unittype);
+    UNIT_SYSTEM = UnitSystem(unittype);
 elseif ~exist('UNIT_SYSTEM', 'var')
-    UNIT_SYSTEM = UnitSystem_e.BE;
+    UNIT_SYSTEM = UnitSystem.BE;
 end
 system = UNIT_SYSTEM;
 end
