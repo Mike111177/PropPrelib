@@ -2,10 +2,10 @@ function TL = ConstantAltitudeSpeedTurn(varargin)
 % CONSTANTALTITUDESPEEDTURN('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'n', n) 
 % calculates wingloading with default max thrust model.
 % 
-% CONSTANTALTITUDESPEEDTURN('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'n', n, 'AB', 'max') 
+% CONSTANTALTITUDESPEEDTURN('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'n', n, 'AB', 1) 
 % calculates wingloading with max thrust model.
 %
-% CONSTANTALTITUDESPEEDTURN('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'n', n, 'AB', 'mil') 
+% CONSTANTALTITUDESPEEDTURN('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'n', n, 'AB', 0) 
 % calculates wingloading with millitary thrust model.
 %
 %   TODO: make work with any thrust percentage.
@@ -13,7 +13,7 @@ function TL = ConstantAltitudeSpeedTurn(varargin)
 
 import PropPrelib.* 
 
-[T, a, P] = atmos(alt); 
+[~, ~, P] = atmos(alt); 
 q = dynamic_pressure(P, M);
 [theta, delta] = atmos_nondimensional(alt);
 [theta_0, delta_0] = adjust_atmos(theta, delta, M);
@@ -43,7 +43,7 @@ if isempty(p)
     addParameter(p, 'alt'     , RequiredArg, @isnumeric);
     addParameter(p, 'M'       , RequiredArg, @isnumeric);
     addParameter(p, 'n'       , RequiredArg, @isnumeric);
-    addParameter(p, 'AB', 1);
+    addParameter(p, 'AB'      , RequiredArg, @isnumeric);
 end
 
 try

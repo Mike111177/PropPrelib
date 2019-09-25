@@ -13,7 +13,7 @@ function TL = ConstantAltitudeSpeedCruise(varargin)
 
 import PropPrelib.* 
 
-[T, a, P] = atmos(alt); 
+[~, ~, P] = atmos(alt); 
 q = dynamic_pressure(P, M);
 [theta, delta] = atmos_nondimensional(alt);
 [theta_0, delta_0] = adjust_atmos(theta, delta, M);

@@ -21,7 +21,7 @@ function PI = CASTInt(beta, WLto, TLto, alt, M, TR, n, Turns, CDR)
     CDdCL = (CD+CDR)/CL;
     
     %Find afterburner setting where TL = set value
-    ABreq = fminbnd(@(ABv)Constraint.C('WL', WLto,'beta', beta,'TR',TR,'M',M,'alt',alt,'n',n,'AB',ABv)-TLto, 0, 1);
+    [ABreq, TLact] = fminbnd(@(ABv)Constraint.C('WL', WLto,'beta', beta,'TR',TR,'M',M,'alt',alt,'n',n,'AB',ABv)-TLto, 0, 1)
     tfsc_m = tfsc('theta', theta,...
                   'M0'   , M,...
                   'AB'   , ABreq);    
