@@ -2,14 +2,14 @@ function TL = HorizontalAcceleration(varargin)
 % HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dVdt', dVdt, 'M', M) 
 % calculates wingloading with default max thrust model.
 % 
-% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'M1', M1, 'M2', M2, 'Throttle', 'max') 
+% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'M1', M1, 'M2', M2, 'AB', 'max') 
 % calculates wingloading with max thrust model.
 %
-% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'V1', V1, 'V2', V2, 'Throttle', 'mil') 
+% HORIZONTALACCELERATION('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'dt', dt, 'V1', V1, 'V2', V2, 'AB', 'mil') 
 % calculates wingloading with millitary thrust model.
 %
 %   TODO: make work with any thrust percentage.
-[WL,beta,TR,T,a,P,dVdt,M,Throttle] = parsevars(varargin);
+[WL,beta,TR,T,a,P,dVdt,M,AB] = parsevars(varargin);
 
 import PropPrelib.* 
  
@@ -20,12 +20,10 @@ delta = P/Pstd;
 [theta_0, delta_0] = adjust_atmos(theta, delta, M);
 
 % Calculating Thrust Lapse
-switch(Throttle)
-    case 'max'
-        alpha = thrustLapse_max(theta_0, delta_0, TR, M);
-    case 'mil'
-        alpha = thrustLapse_mil(theta_0, delta_0, TR, M);
-end
+alpha = thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'AB', AB);
  
 [K1, CD0] = drag_constants(M);
 CDR = 0;
@@ -35,7 +33,7 @@ K2 = 0;
 TL = beta./alpha.*(K1.*beta./q.*WL+K2+(CD0+CDR)./(beta./q)./WL+1./g0.*dVdt);
 end
 
-function [WL,beta,TR,T,a,P,dVdt,M,Throttle] = parsevars(vars)
+function [WL,beta,TR,T,a,P,dVdt,M,AB] = parsevars(vars)
 import PropPrelib.*
 persistent p
 if isempty(p)
@@ -56,7 +54,7 @@ if isempty(p)
     addParameter(p, 'dV'   , RequiredArg().alt().convert(@(a,b)b-a, 'V1', 'V2'), @isnumeric);
     addParameter(p, 'V1'   , RequiredArg().alt().convert(@(a,b)a*b, 'a', 'M1'), @isnumeric);
     addParameter(p, 'V2'   , RequiredArg().alt().convert(@(a,b)a*b, 'a', 'M2'), @isnumeric);
-    addParameter(p, 'Throttle', 'max');
+    addParameter(p, 'AB', 'max');
 end
 
 try
@@ -73,7 +71,7 @@ a = arg.a;
 P = arg.P;
 dVdt = arg.dVdt;
 M = arg.M;
-Throttle = arg.Throttle;
+AB = arg.AB;
 end
 
 

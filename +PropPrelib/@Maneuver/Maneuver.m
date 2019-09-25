@@ -13,8 +13,8 @@ classdef Maneuver
         function res = subsref(c, args)
             switch(args.type)
                 case '()'
-                    if isa(c.f,'function_handle')
-                        PI = c.f(args.subs{:});
+                    if isa(c.func,'function_handle')
+                        PI = c.func(args.subs{:});
                         res = PI;
                     else
                         error(['This maneuver is not implemented yet!: ' c.name]);
@@ -29,8 +29,8 @@ classdef Maneuver
         B('B - Horizontal Acceleration', NaN),
         C('C - Climb and Acceleration', NaN),
         D('D - Takeoff Acceleration', NaN),
-        E('E - Constant Altitude/Speed Cruise', NaN),
-        F('F - Constant Altitude/Speed Turn', NaN),
+        E('E - Constant Altitude/Speed Cruise', @ConstantAltitudeSpeedCruise),
+        F('F - Constant Altitude/Speed Turn', @ConstantAltitudeSpeedTurn),
         G('G - Best Cruise Mach and Altitude', NaN),
         H('H - Loiter', NaN),
         I('I - Warm-up', NaN),

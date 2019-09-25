@@ -11,7 +11,7 @@ if usys == UnitSystem_e.BE
     h = h * 0.3048; %Feet to Meters
 end
 
-[T, a, P, rho] = atmoslapse(h, model.modeldata{:});
+[T, a, P, rho] = model.airAt(h);
 
 if usys == UnitSystem_e.BE
     T = T * 1.8; %Kelvin to Rankine

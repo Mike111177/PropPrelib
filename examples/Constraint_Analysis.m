@@ -8,7 +8,7 @@ import PropPrelib.*;
 
 units BE;
 atmodel Standard;
-enginetype LBTF;
+enginemodel LBTF;
 dragmodel FutureFighter;
 
 WL = linspace(20,120);

@@ -6,7 +6,7 @@ addpath("..")% Not needed if +PropPrelib folder is in your current path.
 
 import PropPrelib.*
 units BE;
-enginetype LBTF;
+enginemodel LBTF;
 
 M = linspace(0,2);
 
@@ -19,8 +19,14 @@ TR = 1;
 subplot(2,2,1);
 hold on
 title("Alt = 0, TR = 1");
-plot(M, thrustLapse_max(theta_0, delta_0, TR, M));
-plot(M, thrustLapse_mil(theta_0, delta_0, TR, M));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'max'));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'mil'));
 xlabel("M0");
 ylabel("alpha");
 legend("max", "mil", 'Location',"SouthWest");
@@ -35,8 +41,14 @@ TR = 1.08;
 subplot(2,2,2);
 hold on
 title("Alt = 0, TR = 1.08");
-plot(M, thrustLapse_max(theta_0, delta_0, TR, M));
-plot(M, thrustLapse_mil(theta_0, delta_0, TR, M));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'max'));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'mil'));
 xlabel("M0");
 ylabel("alpha");
 legend("max", "mil", 'Location',"SouthWest");
@@ -50,8 +62,14 @@ TR = 1;
 subplot(2,2,3);
 hold on
 title("Alt = 40k, TR = 1");
-plot(M, thrustLapse_max(theta_0, delta_0, TR, M));
-plot(M, thrustLapse_mil(theta_0, delta_0, TR, M));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'max'));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'mil'));
 xlabel("M0");
 ylabel("alpha");
 legend("max", "mil", 'Location',"NorthWest");
@@ -65,16 +83,20 @@ TR = 1.08;
 subplot(2,2,4);
 hold on
 title("Alt = 40k, TR = 1.08");
-plot(M, thrustLapse_max(theta_0, delta_0, TR, M));
-plot(M, thrustLapse_mil(theta_0, delta_0, TR, M));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'max'));
+plot(M, thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'Throttle', 'mil'));
 xlabel("M0");
 ylabel("alpha");
 legend("max", "mil", 'Location',"NorthWest");
 
 %%
-% <include>+PropPrelib/enginetypes/LBTF/thrustLapse_max.m</include>
-%
-% <include>+PropPrelib/enginetypes/LBTF/thrustLapse_mil.m</include>
+% <include>+PropPrelib/+EngineModels/@EngineSimple/private/thrust_lapse_simple.m</include>
 % 
 % <include>+PropPrelib/atmos_nondimensional.m</include>
 %

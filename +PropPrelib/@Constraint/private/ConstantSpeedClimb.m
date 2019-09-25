@@ -2,14 +2,14 @@ function TL = ConstantSpeedClimb(varargin)
 % CONSTANTSPEEDCLIMB('WL', WL, 'beta', beta, 'TR', TR, 'alt1', alt1, 'alt2', alt2, 'dt', dt, 'M', M) 
 % calculates wingloading with default max thrust model.
 % 
-% CONSTANTSPEEDCLIMB('WL', WL, 'beta', beta, 'TR', TR, 'alt1', alt1, 'alt2', alt2, 'dt', dt, 'M', M, 'Throttle', 'max') 
+% CONSTANTSPEEDCLIMB('WL', WL, 'beta', beta, 'TR', TR, 'alt1', alt1, 'alt2', alt2, 'dt', dt, 'M', M, 'AB', 'max') 
 % calculates wingloading with max thrust model.
 %
-% CONSTANTSPEEDCLIMB('WL', WL, 'beta', beta, 'TR', TR, 'alt1', alt1, 'alt2', alt2, 'dt', dt, 'M', M, 'Throttle', 'mil') 
+% CONSTANTSPEEDCLIMB('WL', WL, 'beta', beta, 'TR', TR, 'alt1', alt1, 'alt2', alt2, 'dt', dt, 'M', M, 'AB', 'mil') 
 % calculates wingloading with millitary thrust model.
 %
 %   TODO: make work with any thrust percentage.
-[WL,beta,TR,alt1,alt2,dt,M,Throttle] = parsevars(varargin);
+[WL,beta,TR,alt1,alt2,dt,M,AB] = parsevars(varargin);
 
 import PropPrelib.* 
 
@@ -23,12 +23,10 @@ q = dynamic_pressure(P, M);
 [theta_0, delta_0] = adjust_atmos(theta, delta, M);
 
 % Calculating Thrust Lapse
-switch(Throttle)
-    case 'max'
-        alpha = thrustLapse_max(theta_0, delta_0, TR, M);
-    case 'mil'
-        alpha = thrustLapse_mil(theta_0, delta_0, TR, M);
-end
+alpha = thrustLapse('theta_0', theta_0,...
+                    'delta_0', delta_0,...
+                    'TR', TR,...
+                    'AB', AB);
  
 [K1, CD0] = drag_constants(M);
 CDR = 0;
@@ -38,7 +36,7 @@ K2 = 0;
 TL = beta./alpha.*(K1.*beta./q.*WL+K2+(CD0+CDR)./(beta./q)./WL+1./V.*dh./dt);
 end
 
-function [WL,beta,TR,alt1,alt2,dt,M,Throttle] = parsevars(vars)
+function [WL,beta,TR,alt1,alt2,dt,M,AB] = parsevars(vars)
 import PropPrelib.RequiredArg
 persistent p
 if isempty(p)
@@ -50,7 +48,7 @@ if isempty(p)
     addParameter(p, 'alt2'  , RequiredArg, @isnumeric);
     addParameter(p, 'dt'  , RequiredArg, @isnumeric);
     addParameter(p, 'M'   , RequiredArg, @isnumeric);
-    addParameter(p, 'Throttle', 'max');
+    addParameter(p, 'AB', 1);
 end
 
 try
@@ -66,6 +64,6 @@ alt1 = arg.alt1;
 alt2 = arg.alt2;
 dt = arg.dt;
 M = arg.M;
-Throttle = arg.Throttle;
+AB = arg.AB;
 end
 

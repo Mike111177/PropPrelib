@@ -27,13 +27,14 @@ classdef RequiredArg
         end
     end
     methods(Static)
-        function arg = check(p, vars)
+        function [arg, unmatched] = check(p, vars)
             import PropPrelib.RequiredArg
             parse(p);
             dargs = p.Results;
             defaults = p.UsingDefaults;
             parse(p,vars{:});
             arg = p.Results;
+            unmatched = p.Unmatched;
             for k = 1:numel(defaults)
                 name = defaults{k};
                 value = dargs.(name);
