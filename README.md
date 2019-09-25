@@ -11,3 +11,5 @@ In your script write the following at the beginning:
 ```python
 import PropPrelim.*
 ```
+
+Take a look in the examples folder for specific use cases.
