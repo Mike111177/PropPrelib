@@ -34,7 +34,7 @@ function [PI, stats] = CASTInt(beta, WLto, TLto, alt, M, TR, n, Turns, CDR)
     V = a*M;                   
     dt = 2*pi*Turns*V/(g0*sqrt(n^2-1));
    
-    PI = exp(-tfsc_m*CDdCL/n*dt);
+    PI = exp(-tfsc_m*CDdCL*n*dt);
     stats.alpha_req = alpha_req;
     stats.alpha_avail = alpha_avail;                                
     stats.AB_req = AB_req;
