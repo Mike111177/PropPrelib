@@ -23,9 +23,10 @@ classdef AtmosModel
             m.lapsedata = lapse;
         end
         function [T, a, P, rho] = airAt(m, h)
-            T = arrayfun(@(h)tempAtAlt(h, m.lapsedata), h);
+            import PropPrelib.vecfun;
+            T = vecfun(@tempAtAlt, h, m.lapsedata);
             a = spdofsnd(T);
-            P = arrayfun(@(h)pressAtAlt(h), h);
+            P = vecfun(@pressAtAlt, h);
             rho = dense(T, P);
         end
     end

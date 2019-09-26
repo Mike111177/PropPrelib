@@ -27,10 +27,3 @@ legend('Standard', 'Cold', 'Hot', 'Tropic')
 ylabel('h (km)')
 xlabel('theta')
 title('Fig. B.1')
-
-h2 = 0:1E3:100E3;
-units BE;
-[~, delta, ~] = atmos_nondimensional(h2);
-hold off
-plot(h2/1000, delta)
-[h2/1000; delta]
