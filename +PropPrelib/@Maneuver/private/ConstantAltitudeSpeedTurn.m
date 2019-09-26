@@ -29,7 +29,8 @@ function [PI, stats] = CASTInt(beta, WLto, TLto, alt, M, TR, n, Turns, CDR)
     
     tfsc_m = tfsc('theta', theta,...
                   'M0'   , M,...
-                  'AB'   , AB_req);    
+                  'AB'   , AB_req);
+              
     V = a*M;                   
     dt = 2*pi*Turns*V/(g0*sqrt(n^2-1));
    

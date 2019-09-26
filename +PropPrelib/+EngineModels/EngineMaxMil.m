@@ -17,9 +17,9 @@ classdef EngineMaxMil < PropPrelib.Engine
         end
         function tfsc = tfsc(e, varargin)
             [AB, other] = parsevars(varargin);
-            tfscMax = e.subModel(1).tfsc(other);
-            tfscMil = e.subModel(0).tfsc(other);
-            tfsc = interp1([0, 1], [tfscMil, tfscMax], AB);
+            tfscMax = e.mMax.tfsc(other);
+            tfscMil = e.mMil.tfsc(other);
+            tfsc = tfscMil + AB.*(tfscMax - tfscMil);
         end
     end
     methods (Access = private)

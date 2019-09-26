@@ -25,7 +25,7 @@ classdef Maneuver
     end
     enumeration
         A('A - Constant Speed Climb', NaN),
-        B('B - Horizontal Acceleration', NaN),
+        B('B - Horizontal Acceleration', @HorizontalAcceleration),
         C('C - Climb and Acceleration', NaN),
         D('D - Takeoff Acceleration', NaN),
         E('E - Constant Altitude/Speed Cruise', @ConstantAltitudeSpeedCruise),
