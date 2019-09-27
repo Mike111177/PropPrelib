@@ -12,6 +12,8 @@ function [PI, stats] = HorizontalAcceleration(varargin)
     
     %This stays the same every iteration, only calculate it once
     [~, a, P, ~, theta, delta] = atmos(alt);
+    stats.Theta = theta;
+    stats.Delta = delta;
     for i = 1:Intervals    
         M = [Mr(i), Mr(i+1)];
         [theta_0, delta_0] = adjust_atmos(theta, delta, M);

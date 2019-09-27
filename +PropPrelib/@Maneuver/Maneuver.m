@@ -32,7 +32,7 @@ classdef Maneuver
         F('F - Constant Altitude/Speed Turn', @ConstantAltitudeSpeedTurn),
         G('G - Best Cruise Mach and Altitude', NaN),
         H('H - Loiter', NaN),
-        I('I - Warm-up', NaN),
+        I('I - Warm-up', @WarmUp),
         J('J - Takeoff Rotation', NaN),
         K('K - Constant Energy Height Maneuver', NaN),
         L('L - Deliver Payload', NaN),

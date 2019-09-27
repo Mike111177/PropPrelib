@@ -36,6 +36,10 @@ function [PI, stats] = ConstantAltitudeSpeedCruise(varargin)
     stats.CDdCL = CDdCL;
     stats.Time = dt;
     stats.PI = PI;
+    stats.Theta0 = theta_0;
+    stats.Delta0 = delta_0;
+    stats.Theta = theta;
+    stats.Delta = delta;
 end
 
 function [beta, WLto, TLto, alt, M, TR, D, CDR] = parsevars(vars)
