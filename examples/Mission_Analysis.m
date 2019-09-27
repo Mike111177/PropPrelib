@@ -7,6 +7,7 @@ addpath("..")% Not needed if +PropPrelib folder is in your current path.
 import PropPrelib.*;
 
 units BE;
+atmodel Standard;
 dragmodel FutureFighter;
 enginemodel LBTF;
 
@@ -53,10 +54,12 @@ m4cfg.M2 = 1.6;
 m4cfg.alt = 30000;
 m4cfg.AB = 1; 
 
+%Trying maneuver 4 with 1 interval
 PI1int = Maneuver.B('Intervals', 1,...
                     m4cfg,... %Rest of Manuever 4 parameters
                     mcfg); %Rest of mission parameters
-                
+
+%Trying maneuver 4 with 1 interval
 [PI(end+1), stats{end+1}] = Maneuver.B('Intervals', 3,...
                                        m4cfg,... %Rest of Manuever 4 parameters
                                        mcfg); %Rest of mission parameters                                   

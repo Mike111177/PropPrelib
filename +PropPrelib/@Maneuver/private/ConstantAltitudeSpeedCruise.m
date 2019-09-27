@@ -1,23 +1,12 @@
 function [PI, stats] = ConstantAltitudeSpeedCruise(varargin)
-    [beta, WLto, TLto, alt, M, TR, D, CDR, Intervals] = parsevars(varargin);
-    PI = 1;
-    for i = 1:Intervals
-        [iPI, istats] = CASCInt(beta, WLto, TLto, alt, M, TR, D/Intervals, CDR);
-        PI = PI*iPI;
-        stats(i) = istats;
-        beta = beta*PI;
-    end
-end
-
-function [PI, stats] = CASCInt(beta, WLto, TLto, alt, M, TR, D, CDR) 
+    [beta, WLto, TLto, alt, M, TR, D, CDR] = parsevars(varargin);
     import PropPrelib.* 
 
     [~, a, P] = atmos(alt); 
     [theta, delta] = atmos_nondimensional(alt);
     [theta_0, delta_0] = adjust_atmos(theta, delta, M);
     q = dynamic_pressure(P, M);
-    [K1, CD0] = drag_constants(M);
-    K2 = 0;
+    [K1, CD0, K2] = drag_constants(M);
   
     CL = beta/q*WLto;
     CD = K1*CL^2 + K2*CL + CD0;
@@ -34,13 +23,21 @@ function [PI, stats] = CASCInt(beta, WLto, TLto, alt, M, TR, D, CDR)
     dt = D/(a*M);
    
     PI = exp(-tfsc_m*CDdCL*dt);
-    stats.alpha_req = alpha_req;
-    stats.alpha_avail = alpha_avail;                                
+    
+    stats.Alpha_req = alpha_req;
+    stats.Alpha = alpha_avail;                               
     stats.AB_req = AB_req;
-    stats.tfsc = tfsc_m;
+    stats.AB = AB_req;
+    stats.TFSC = tfsc_m;
+    stats.Beta_1 = beta;
+    stats.Beta_2 = PI*beta;
+    stats.CD = CD;
+    stats.CL = CL;
+    stats.CDdCL = CDdCL;
+    stats.Time = dt;
 end
 
-function [beta, WLto, TLto, alt, M, TR, D, CDR, Intervals] = parsevars(vars)
+function [beta, WLto, TLto, alt, M, TR, D, CDR] = parsevars(vars)
 import PropPrelib.*
 persistent p
 if isempty(p)
@@ -53,7 +50,6 @@ if isempty(p)
     addParameter(p, 'M'   , RequiredArg, @isnumeric);
     addParameter(p, 'D'   , RequiredArg, @isnumeric);
     addParameter(p, 'CDR' , 0, @isnumeric);
-    addParameter(p, 'Intervals', 20, @(x)isnumeric(x)&&isscalar(x));
 end
 
 try
@@ -70,7 +66,6 @@ M = arg.M;
 TR = arg.TR;
 D = arg.D;
 CDR = arg.CDR;
-Intervals = arg.Intervals;
 end
 
 
