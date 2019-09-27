@@ -1,5 +1,6 @@
-function [T, a, P, rho] = atmos( h, model )
+function [T, a, P, rho, theta, delta, sigma] = atmos( h, model )
 import PropPrelib.*
+persistent STD
 
 if nargin == 1
     model = atmodel;
@@ -11,6 +12,16 @@ if usys == UnitSystem.BE
 end
 
 [T, a, P, rho] = model.airAt(h);
+
+%If outputs call for non-dimensional
+if nargout>4
+    if isempty(STD)
+        [STD.T, STD.a, STD.P, STD.rho] = AtmosModel.Standard.airAt(0);
+    end
+    theta = T./STD.T;
+    delta = P./STD.P;
+    sigma = rho./STD.rho;
+end
 
 if usys == UnitSystem.BE
     T = T * 1.8; %Kelvin to Rankine

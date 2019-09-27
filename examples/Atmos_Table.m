@@ -11,13 +11,13 @@ dragmodel FutureFighter;
 
 h = linspace(0, 30E3, 200);
 atmodel Standard;
-[theta_stand, a, P] = atmos_nondimensional(h);
+[~, ~, ~, ~, theta_stand] = atmos(h);
 atmodel Cold;
-theta_cold = atmos_nondimensional(h);
+[~, ~, ~, ~, theta_cold] = atmos(h);
 atmodel Hot;
-theta_hot = atmos_nondimensional(h);
+[~, ~, ~, ~, theta_hot] = atmos(h);
 atmodel Tropic;
-theta_tropic = atmos_nondimensional(h);
+[~, ~, ~, ~, theta_tropic] = atmos(h);
 hold on
 plot(theta_stand,h/1000) 
 plot(theta_cold,h/1000) 

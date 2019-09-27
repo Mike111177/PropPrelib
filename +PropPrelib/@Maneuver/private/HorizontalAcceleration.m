@@ -1,21 +1,23 @@
 function [PI, stats] = HorizontalAcceleration(varargin)
-[beta, WLto, TLto, alt, M1, M2, TR, CDR, AB, Intervals] = parsevars(varargin);
+    [beta, WLto, TLto, alt, M1, M2, TR, CDR, AB, Intervals] = parsevars(varargin);
+    import PropPrelib.* 
+
+    %This stays the same every iteration, only calculate it once
+    [~, a, P, ~, theta, delta] = atmos(alt);
     PI = 1;
     M = linspace(M1, M2, Intervals+1);
     for i = 1:Intervals
-        [iPI, istats] = HACCInt(beta, WLto, TLto, alt, M(i), M(i+1), TR, CDR, AB);
+        [iPI, istats] = HACCInt(beta, WLto, TLto, M(i), M(i+1), TR, CDR, AB, a, P, theta, delta);
         PI = PI*iPI;
         stats(i) = istats;
         beta = beta*iPI;
     end
 end
 
-function [PI, stats] = HACCInt(beta, WLto, TLto, alt, M1, M2, TR, CDR, AB) 
+function [PI, stats] = HACCInt(beta, WLto, TLto, M1, M2, TR, CDR, AB, a, P, theta, delta) 
     import PropPrelib.* 
     
     M = [M1, M2];
-    [~, a, P] = atmos(alt);
-    [theta, delta] = atmos_nondimensional(alt);
     [theta_0, delta_0] = adjust_atmos(theta, delta, M);
     q = dynamic_pressure(P, M);
     [K1, CD0, K2] = drag_constants(M);
