@@ -37,6 +37,7 @@ function [PI, stats] = ConstantAltitudeSpeedTurn(varargin)
     stats.CL = CL;
     stats.CDdCL = CDdCL;
     stats.Time = dt;
+    stats.PI = PI;
 end
 
 function [beta, WLto, TLto, alt, M, TR, n, Turns, CDR] = parsevars(vars)

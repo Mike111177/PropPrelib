@@ -42,6 +42,7 @@ function [PI, stats] = CSC(beta, WLto, TLto, alt1, alt2, M, TR, CDR, AB)
     stats.alpha = alpha;                              
     stats.AB = AB;
     stats.tfsc = tfsc_m;
+    stats.PI = PI;
 end
 
 function [beta, WLto, TLto, alt1, alt2, M, TR, CDR, AB, Intervals] = parsevars(vars)
