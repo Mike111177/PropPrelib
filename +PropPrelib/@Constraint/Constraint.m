@@ -29,7 +29,7 @@ classdef Constraint
         B('B - Constant Speed Climb', @ConstantSpeedClimb),
         C('C - Constant Altitude/Speed Turn', @ConstantAltitudeSpeedTurn),
         D('D - Horizontal Acceleration', @HorizontalAcceleration),
-        E('E - Service Ceiling', NaN),
+        E('E - Service Ceiling', @ServiceCeiling),
         F('F - Takeoff (No obstacle)', NaN),
         G('G - Takeoff', NaN),
         H('H - Landing (No obstacle)', NaN),

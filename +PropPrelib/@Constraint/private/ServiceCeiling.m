@@ -1,22 +1,14 @@
-function TL = ConstantAltitudeSpeedCruise(varargin)
-% CONSTANTALTITUDESPEEDCRUISE('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M) 
-% calculates wingloading with default max thrust model.
-% 
-% CONSTANTALTITUDESPEEDCRUISE('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'AB', 'max') 
-% calculates wingloading with max thrust model.
-%
-% CONSTANTALTITUDESPEEDCRUISE('WL', WL, 'beta', beta, 'TR', TR, 'alt', alt, 'M', M, 'AB', 'mil') 
-% calculates wingloading with millitary thrust model.
-%
-%   TODO: make work with any thrust percentage.
-[WL,beta,TR,alt,M,AB] = parsevars(varargin);
+function TL = ServiceCeiling(varargin)
+[WL,beta,TR,alt,M,AB,Ps] = parsevars(varargin);
 
 import PropPrelib.* 
 
-[~, ~, P] = atmos(alt); 
+[~, a, P, ~, theta, delta] = atmos(alt); 
 q = dynamic_pressure(P, M);
-[theta, delta] = atmos_nondimensional(alt);
 [theta_0, delta_0] = adjust_atmos(theta, delta, M);
+
+CL = beta/q*WL;
+V = a*M;
 
 % Calculating Thrust Lapse
 alpha = thrustLapse('theta_0', theta_0,...
@@ -28,10 +20,10 @@ alpha = thrustLapse('theta_0', theta_0,...
 CDR = 0;
 
 %EQ 2.12
-TL = beta./alpha.*(K1.*beta./q.*WL+K2+(CD0+CDR)./(beta./q)./WL);
+TL = beta./alpha.*(K1.*CL+K2+(CD0+CDR)./CL+1./V.*Ps);
 end
 
-function [WL,beta,TR,alt,M,AB] = parsevars(vars)
+function [WL,beta,TR,alt,M,AB,Ps] = parsevars(vars)
 import PropPrelib.*
 persistent p
 if isempty(p)
@@ -42,6 +34,7 @@ if isempty(p)
     addParameter(p, 'alt'  , RequiredArg, @isnumeric);
     addParameter(p, 'M'    , RequiredArg, @isnumeric);
     addParameter(p, 'AB'   , RequiredArg, @isnumeric);
+    addParameter(p, 'Ps'   , RequiredArg, @isnumeric);
 end
 
 try
@@ -56,5 +49,6 @@ TR = arg.TR;
 alt = arg.alt;
 M = arg.M;
 AB = arg.AB;
+Ps = arg.Ps;
 end
 
