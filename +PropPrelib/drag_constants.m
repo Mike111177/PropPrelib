@@ -3,7 +3,7 @@ function [K1,CD0,K2] = drag_constants(M, drag_data)
 if nargin == 1
     import PropPrelib.dragmodel
     model = dragmodel;
-    drag_data = model.data;
+    drag_data = model.dragdata;
 end
 K1 = interp1(drag_data.M, drag_data.K1, M, 'linear');
 K2 = interp1(drag_data.M, drag_data.K2, M, 'linear');
