@@ -3,9 +3,8 @@ function [PI, stats] = WarmUp(varargin)
     import PropPrelib.* 
 
     [~, ~, ~, ~, theta, delta] = atmos(alt); 
-    [theta_0, delta_0] = adjust_atmos(theta, delta, 0);
     
-    alpha = thrustLapse('theta_0', theta_0,'delta_0', delta_0,'TR', TR,'AB', 0);   
+    alpha = thrustLapse('theta_0', theta,'delta_0', delta,'TR', TR,'AB', 0);   
     tfsc_m = tfsc('theta', theta,'M0', 0,'AB', 0);
             
     PI = 1-tfsc_m*alpha/beta*TLto*dt;
@@ -17,8 +16,8 @@ function [PI, stats] = WarmUp(varargin)
     stats.Beta_2 = PI*beta;
     stats.Time = dt;
     stats.PI = PI;
-    stats.Theta0 = theta_0;
-    stats.Delta0 = delta_0;
+    stats.Theta0 = theta;
+    stats.Delta0 = delta;
     stats.Theta = theta;
     stats.Delta = delta;
 end
