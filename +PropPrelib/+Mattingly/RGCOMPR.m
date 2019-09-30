@@ -1,5 +1,5 @@
 %Appendix F
-function [M, TtdT, PtdP, MFP] = RGCOMPR (Item, Tt, f, M, TtdT, PtdP, MFP)
+function [M, TtdT, PtdP, MFP] = RGCOMPR (Item, Tt, M, f, TtdT, PtdP, MFP)
 % Inputs: Item, Tt, f, and one of the following: M, Tt/T, Pt/P, and MFP
 % Outputs: M, Tt/T, Pt/P, and MFP
 import PropPrelib.Mattingly.*

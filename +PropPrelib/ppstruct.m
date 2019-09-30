@@ -3,7 +3,10 @@ function ppstruct(s, indent)
         indent = 0;
     end
     names = fieldnames(s);
-    labels = pad(string(names), 'left');
+    labels = string(names);
+    labels = strrep(labels, "__d", "/");
+    labels = strrep(labels, "_", " ");
+    labels = pad(labels, 'left');
     
     lines = cell(1,numel(names));
     for k = 1:numel(names)
