@@ -16,6 +16,12 @@ if nargin == 11
     V = M.*a;
 end
 
+[T, a, P, rho, theta, delta, sigma] = atmos(25E3);
+v = linspace(900, 2000, 30000);
+t = vecfun(@PsFVh, v, T, a, P, rho, theta, delta, sigma, TR, TL, WL, Beta_TO, 1, AB);
+plot(v/a, -t)
+input
+
 end
 
 function [V, Ps] = VmaxPs(h,TR, TL, WL, Beta_TO, AB)
