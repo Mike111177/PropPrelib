@@ -10,15 +10,15 @@ classdef EngineMaxMil < PropPrelib.Engine
             e.mMil = EngineSimple(cMil);
         end
         function lapse = thrustLapse(e, varargin)
-            [AB, other] = parsevars(varargin);
-            lapseMax = e.mMax.thrustLapse(other);
-            lapseMil = e.mMil.thrustLapse(other);
+            [AB, other] = parsevars(3, varargin);
+            lapseMax = e.mMax.thrustLapse(other{:});
+            lapseMil = e.mMil.thrustLapse(other{:});
             lapse = lapseMil + AB.*(lapseMax - lapseMil);
         end
         function tfsc = tfsc(e, varargin)
-            [AB, other] = parsevars(varargin);
-            tfscMax = e.mMax.tfsc(other);
-            tfscMil = e.mMil.tfsc(other);
+            [AB, other] = parsevars(2, varargin);
+            tfscMax = e.mMax.tfsc(other{:});
+            tfscMil = e.mMil.tfsc(other{:});
             tfsc = tfscMil + AB.*(tfscMax - tfscMil);
         end
     end
@@ -34,9 +34,13 @@ classdef EngineMaxMil < PropPrelib.Engine
     end
 end
 
-
-
-function [AB, other] = parsevars(vars)
+function [AB, other] = parsevars(nump, vars)
+    other = {};
+    can = vars(1:nump);
+    if length(can)==nump && all(cellfun(@isnumeric, can)) 
+        other = vars(1:nump);
+        vars = vars(nump+1:end);
+    end
     import PropPrelib.*
     persistent p
     if isempty(p)
@@ -45,11 +49,13 @@ function [AB, other] = parsevars(vars)
         addParameter(p, 'AB', RequiredArg);
     end
     try
-        [arg, other] = parse(p, vars{:});
+        [arg, ota] = parse(p, vars{:});
     catch ME
         throwAsCaller(ME)
-    end   
-    
+    end
+    if ~isempty(fieldnames(ota))
+        other = [other, ota];
+    end
     AB = arg.AB;
     if ~isnumeric(AB)
         AB = t2ab(AB);

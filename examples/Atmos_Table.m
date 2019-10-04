@@ -1,5 +1,5 @@
 clc
-clear all
+clear
 close all
 
 addpath("..")% Not needed if +PropPrelib folder is in your current path.

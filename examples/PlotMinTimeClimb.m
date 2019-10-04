@@ -16,25 +16,29 @@ WL = 64;
 TL = 1.25;
 TR = 1.07;
 h_TO = 0;
-CLm = 1.8;
-kTO = 1.15;
 Beta_TO = 0.97;
 AB = 0;
+n = 1;
 
 hold on
-% H = linspace(0,70E3);
-% % [~, V, ~] = atmos(H);
-% plot(V, H/1E3)
-[V, H, t] = MinTimeClimbSch(h, TR, TL, WL, CLm, Beta_TO, h_TO, kTO, AB,50);
-plot(V, H/1E3)
-[V, H] = MinTimeClimbSch(h, TR, TL, WL, CLm, Beta_TO, h_TO, kTO, AB,6);
-plot(V, H/1E3)
-[V, H] = MinTimeClimbSch(h, TR, TL, WL, CLm, Beta_TO, h_TO, kTO, AB,50, 0.9);
-plot(V, H/1E3)
-[V, H] = MinTimeClimbSch(h, TR, TL, WL, CLm, Beta_TO, h_TO, kTO, AB,6, 0.9);
-plot(V, H/1E3)
 axis([500, 1500, 0, 70])
 grid on
+title(sprintf('%d iterations.', 50))
 ylabel('Alt (kft)')
 xlabel('Velocity (ft/s)')
-legend('M = 1', 'Min(50)', 'Min(6)', 'Mach<0.9(50)', 'Mach<0.9(6)','Location', 'SouthWest')
+H = linspace(0,70E3);
+[~, V, ~] = atmos(H);
+plot(V, H/1E3,'LineWidth',2)
+[V, H] = MinTimeClimbSch(h, TR, TL, WL, Beta_TO, h_TO, n, AB, 50);
+h_kft = H(1:2:end)'./1E3;
+min_t_V = V(1:2:end)';
+plot(V, H/1E3,'LineWidth',4)
+V = MinTimeClimbSch(h, TR, TL, WL, Beta_TO, h_TO, n, AB, 50, 0.9);
+less_M_09_V = V(1:2:end)';
+plot(V, H/1E3,'LineWidth',4)
+legend('\color{white}M = 1', '\color{white}Max Ps', '\color{white}Mach<0.9','Location', 'SouthWest', 'color','none','color','none','Box', 'off')
+set(gca,'Color','k')
+set(gca,'GridColor','w')
+
+table(h_kft,min_t_V,less_M_09_V)
+

@@ -1,11 +1,19 @@
 function [T, a, P, rho, theta, delta, sigma] = atmos( h, model )
 import PropPrelib.*
-persistent STD
-
+persistent memAtmos
+if isempty(memAtmos)
+    memAtmos = memoize(@atmosImpl);
+end
 if nargin == 1
     model = atmodel;
 end
 
+[T, a, P, rho, theta, delta, sigma] = memAtmos( h, model );
+end
+
+function [T, a, P, rho, theta, delta, sigma] = atmosImpl( h, model )
+import PropPrelib.*
+persistent STD
 usys = units;
 if usys == UnitSystem.BE
     h = h * 0.3048; %Feet to Meters

@@ -39,9 +39,9 @@ function [PI, stats] = CSC(beta, WLto, TLto, alt1, alt2, M, TR, CDR, AB)
     
     PI = exp(-tfsc_m/(V*(1-u))*dZe);
     
-    stats.alpha = alpha;                              
+    stats.Alpha = alpha;                              
     stats.AB = AB;
-    stats.tfsc = tfsc_m;
+    stats.TFSC = tfsc_m;
     stats.PI = PI;
 end
 

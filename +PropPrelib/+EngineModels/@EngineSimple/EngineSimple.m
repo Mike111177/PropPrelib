@@ -15,7 +15,8 @@ classdef EngineSimple < PropPrelib.Engine
                                             e.cthrust.A, e.cthrust.B, e.cthrust.C, e.cthrust.D);
         end
         function tfsc = tfsc(e, varargin)
-            tfsc = tfsc_simple(varargin{:}, e.ctfsc);
+            [theta, M0] = parsetf(varargin);
+            tfsc = tfsc_simple(theta, M0, e.ctfsc.C1, e.ctfsc.C2);
         end
     end
 end
@@ -48,6 +49,10 @@ C2 = arg.C2;
 end
 
 function [theta_0, delta_0, TR] = parsetl(vars)
+    if length(vars) == 3
+        [theta_0, delta_0, TR] = deal(vars{:});
+        return;
+    end
     import PropPrelib.*
     persistent p
     if isempty(p)
@@ -66,4 +71,27 @@ function [theta_0, delta_0, TR] = parsetl(vars)
     theta_0 = arg.theta_0;
     delta_0 = arg.delta_0;
     TR = arg.TR;
+end
+
+function [theta, M0] = parsetf(vars)
+    if length(vars) == 2
+        [theta, M0] = deal(vars{:});
+        return;
+    end
+    import PropPrelib.*
+    persistent p
+    if isempty(p)
+        p = ArgParser;
+        addParameter(p, 'theta', RequiredArg, @isnumeric);
+        addParameter(p, 'M0', RequiredArg, @isnumeric);
+    end
+
+    try
+        arg = parse(p, vars{:});
+    catch ME
+        throwAsCaller(ME)
+    end   
+
+    theta = arg.theta;
+    M0 = arg.M0;
 end

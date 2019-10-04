@@ -8,6 +8,7 @@ function [PI, stats] = HorizontalAcceleration(varargin)
     stats.Alpha = 0;                      
     stats.AB = 0;
     stats.TFSC = 0;
+    stats.CD__dCL = 0;
     stats.Beta_1 = beta;
     
     %This stays the same every iteration, only calculate it once
@@ -15,7 +16,7 @@ function [PI, stats] = HorizontalAcceleration(varargin)
     stats.Theta = theta;
     stats.Delta = delta;
     for i = 1:Intervals    
-        M = [Mr(i), Mr(i+1)];
+        M = [Mr(i), Mr(i+1)]';
         [theta_0, delta_0] = adjust_atmos(theta, delta, M);
         q = dynamic_pressure(P, M);
         [K1, CD0, K2] = drag_constants(M);
@@ -24,19 +25,10 @@ function [PI, stats] = HorizontalAcceleration(varargin)
         CD = K1.*CL.^2 + K2.*CL + CD0;
         CDdCL = (CD+CDR)./CL;
 
-        alpha = thrustLapse('theta_0', theta_0,...
-                            'delta_0', delta_0,...
-                            'TR', TR,...
-                            'AB', AB);   
+        alpha = thrustLapse(theta_0,delta_0, TR,'AB', AB);
+        tfsc_m = mean(tfsc(theta, M, 'AB', AB));
 
-        tfsc_m = mean(tfsc('theta', theta,...
-                           'M0'   , M,...
-                           'AB'   , AB));
-
-        V = a*M;
-        V1 = a*M(1);
-        V2 = a*M(2);
-        V = mean(V);
+        V = a*M; V1 = a*M(1); V2 = a*M(2); V = mean(V);
 
         dZe = (V2^2-V1^2)/(2*g0);
         u = mean(CDdCL.*(beta./alpha)*(1./TLto));
@@ -46,6 +38,7 @@ function [PI, stats] = HorizontalAcceleration(varargin)
         stats.Alpha = stats.Alpha + (mean(alpha) - stats.Alpha)/i; %Averaging Alpha                      
         stats.AB = max([stats.AB, AB]); %Important AB is max
         stats.TFSC = stats.TFSC + (tfsc_m - stats.TFSC)/i; %Averaging TFSC 
+        stats.CD__dCL = stats.CD__dCL + (mean(CDdCL) - stats.CD__dCL)/i;
     end
     stats.Beta_2 = stats.Beta_1 * PI;
     stats.PI = PI;

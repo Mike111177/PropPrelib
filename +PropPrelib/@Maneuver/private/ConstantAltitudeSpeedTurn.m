@@ -35,7 +35,7 @@ function [PI, stats] = ConstantAltitudeSpeedTurn(varargin)
     stats.Beta_2 = PI*beta;
     stats.CD = CD;
     stats.CL = CL;
-    stats.CDdCL = CDdCL;
+    stats.CD__dCL = CDdCL;
     stats.Time = dt;
     stats.PI = PI;
 end
