@@ -56,11 +56,11 @@ if isempty(p)
     addParameter(p, 'AB', 'max');
 end
 
-try
+% try
     arg = parse(p, vars{:});
-catch ME
-    throwAsCaller(ME);
-end   
+% catch ME
+%     throwAsCaller(ME);
+% end   
 
 WL = arg.WL;
 beta = arg.beta;

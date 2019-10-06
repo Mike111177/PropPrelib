@@ -6,7 +6,6 @@ function [V, Ps] = VmaxPs(h,TR, TL, WL, Beta_TO, n, AB)
 %Requires enginemodel set.
 %Requires units set.
 %Requires atmodel set.
-%Improved performance with global PARALLEL_VECTORS = true
     opts = optimoptions(@fmincon,'Algorithm','sqp');
     problem = createOptimProblem('fmincon','objective',...
         @negPs,'x0',1000,'lb',200,'ub',2000,'options',opts);
@@ -19,4 +18,3 @@ function [V, Ps] = VmaxPs(h,TR, TL, WL, Beta_TO, n, AB)
         nPs = 0-PsFVh(V, h, TR, TL, WL, Beta_TO, n, AB);
     end
 end
-

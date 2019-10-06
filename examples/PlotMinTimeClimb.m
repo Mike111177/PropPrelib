@@ -36,9 +36,19 @@ plot(V, H/1E3,'LineWidth',4)
 V = MinTimeClimbSch(h, TR, TL, WL, Beta_TO, h_TO, n, AB, 50, 0.9);
 less_M_09_V = V(1:2:end)';
 plot(V, H/1E3,'LineWidth',4)
-legend('\color{white}M = 1', '\color{white}Max Ps', '\color{white}Mach<0.9','Location', 'SouthWest', 'color','none','color','none','Box', 'off')
-set(gca,'Color','k')
-set(gca,'GridColor','w')
+legend('M = 1', 'Max Ps', 'Mach<0.9','Location', 'SouthWest', 'color','none','color','none','Box', 'off')
+drawnow
 
-table(h_kft,min_t_V,less_M_09_V)
+%% Table
+
+disp(table(h_kft,min_t_V,less_M_09_V))
+
+%% Functions Used
+% 
+% <include>+PropPrelib/MinTimeClimbSch.m</include>
+%
+% <include>+PropPrelib/VmaxPs.m</include>
+% 
+% <include>+PropPrelib/PsFVh.m</include>
+
 

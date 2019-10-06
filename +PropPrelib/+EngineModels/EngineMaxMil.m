@@ -10,16 +10,18 @@ classdef EngineMaxMil < PropPrelib.Engine
             e.mMil = EngineSimple(cMil);
         end
         function lapse = thrustLapse(e, varargin)
-            [AB, other] = parsevars(3, varargin);
-            lapseMax = e.mMax.thrustLapse(other{:});
-            lapseMil = e.mMil.thrustLapse(other{:});
-            lapse = lapseMil + AB.*(lapseMax - lapseMil);
+            p = parsevarstl();
+            arg = parse(p, varargin{:});
+            lapseMax = e.mMax.thrustLapse(p);
+            lapseMil = e.mMil.thrustLapse(p);
+            lapse = lapseMil + t2ab(arg.AB).*(lapseMax - lapseMil);
         end
         function tfsc = tfsc(e, varargin)
-            [AB, other] = parsevars(2, varargin);
-            tfscMax = e.mMax.tfsc(other{:});
-            tfscMil = e.mMil.tfsc(other{:});
-            tfsc = tfscMil + AB.*(tfscMax - tfscMil);
+            p = parsevarstf();
+            arg = parse(p, varargin{:});
+            tfscMax = e.mMax.tfsc(p);
+            tfscMil = e.mMil.tfsc(p);
+            tfsc = tfscMil + t2ab(arg.AB).*(tfscMax - tfscMil);
         end
     end
     methods (Access = private)
@@ -34,32 +36,29 @@ classdef EngineMaxMil < PropPrelib.Engine
     end
 end
 
-function [AB, other] = parsevars(nump, vars)
-    other = {};
-    can = vars(1:nump);
-    if length(can)==nump && all(cellfun(@isnumeric, can)) 
-        other = vars(1:nump);
-        vars = vars(nump+1:end);
-    end
-    import PropPrelib.*
+function [parser] = parsevarstl()
     persistent p
     if isempty(p)
+        import PropPrelib.*
         p = ArgParser;
-        p.KeepUnmatched = true;
-        addParameter(p, 'AB', RequiredArg);
+        p.addRequiredParameter('theta_0', @isnumeric).setOptionalPositional('theta_0');
+        p.addRequiredParameter('delta_0', @isnumeric).setOptionalPositional('delta_0');
+        p.addRequiredParameter('TR', @isnumeric).setOptionalPositional('TR');
+        p.addRequiredParameter('AB');
     end
-    try
-        [arg, ota] = parse(p, vars{:});
-    catch ME
-        throwAsCaller(ME)
+    parser = p;
+end
+
+function [parser] = parsevarstf()
+    persistent p
+    if isempty(p)
+        import PropPrelib.*
+        p = ArgParser;
+        p.addRequiredParameter('theta', @isnumeric);
+        p.addRequiredParameter('M0', @isnumeric);
+        p.addRequiredParameter('AB');
     end
-    if ~isempty(fieldnames(ota))
-        other = [other, ota];
-    end
-    AB = arg.AB;
-    if ~isnumeric(AB)
-        AB = t2ab(AB);
-    end
+    parser = p;
 end
 
 function AB = t2ab(t)

@@ -45,18 +45,18 @@ function [PI, stats] = HorizontalAcceleration(varargin)
 end
 
 function [beta, WLto, TLto, alt, M1, M2, TR, CDR, AB, Intervals] = parsevars(vars)
-import PropPrelib.*
+import PropPrelib.*;
 persistent p
 if isempty(p)
     p = ArgParser;
-    addParameter(p, 'beta', RequiredArg, @isnumeric);
-    addParameter(p, 'WLto', RequiredArg, @isnumeric);
-    addParameter(p, 'TLto', RequiredArg, @isnumeric);
-    addParameter(p, 'TR'  , RequiredArg, @isnumeric);
-    addParameter(p, 'alt' , RequiredArg, @isnumeric);
-    addParameter(p, 'M1'  , RequiredArg, @isnumeric);
-    addParameter(p, 'M2'  , RequiredArg, @isnumeric);
-    addParameter(p, 'AB'  , RequiredArg, @isnumeric);
+    addRequiredParameter(p, 'beta', @isnumeric);
+    addRequiredParameter(p, 'WLto', @isnumeric);
+    addRequiredParameter(p, 'TLto', @isnumeric);
+    addRequiredParameter(p, 'TR'  , @isnumeric);
+    addRequiredParameter(p, 'alt' , @isnumeric);
+    addRequiredParameter(p, 'M1'  , @isnumeric);
+    addRequiredParameter(p, 'M2'  , @isnumeric);
+    addRequiredParameter(p, 'AB'  , @isnumeric);
     addParameter(p, 'CDR' , 0, @isnumeric);
     addParameter(p, 'Intervals', 5, @(x)isnumeric(x)&&isscalar(x));
 end
@@ -66,6 +66,8 @@ try
 catch ME
     throwAsCaller(ME)
 end   
+
+p
 
 beta = arg.beta;
 WLto = arg.WLto;

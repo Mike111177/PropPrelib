@@ -26,12 +26,12 @@ import PropPrelib.*
 persistent p
 if isempty(p)
     p = ArgParser;
-    addParameter(p, 'A', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
-    addParameter(p, 'B', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
-    addParameter(p, 'C', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
-    addParameter(p, 'D', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
-    addParameter(p, 'C1', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
-    addParameter(p, 'C2', RequiredArg, @(x)isnumeric(x)&&isscalar(x));
+    p.addRequiredParameter('A' , @(x)isnumeric(x)&&isscalar(x));
+    p.addRequiredParameter('B' , @(x)isnumeric(x)&&isscalar(x));
+    p.addRequiredParameter('C' , @(x)isnumeric(x)&&isscalar(x));
+    p.addRequiredParameter('D' , @(x)isnumeric(x)&&isscalar(x));
+    p.addRequiredParameter('C1', @(x)isnumeric(x)&&isscalar(x));
+    p.addRequiredParameter('C2', @(x)isnumeric(x)&&isscalar(x));
 end
 
 try
@@ -49,17 +49,13 @@ C2 = arg.C2;
 end
 
 function [theta_0, delta_0, TR] = parsetl(vars)
-    if length(vars) == 3
-        [theta_0, delta_0, TR] = deal(vars{:});
-        return;
-    end
     import PropPrelib.*
     persistent p
     if isempty(p)
         p = ArgParser;
-        addParameter(p, 'theta_0', RequiredArg, @isnumeric);
-        addParameter(p, 'delta_0', RequiredArg, @isnumeric);
-        addParameter(p, 'TR', RequiredArg, @isnumeric)
+        p.addRequiredParameter('theta_0', @isnumeric).setOptionalPositional('theta_0');
+        p.addRequiredParameter('delta_0', @isnumeric).setOptionalPositional('delta_0');
+        p.addRequiredParameter('TR', @isnumeric).setOptionalPositional('TR');
     end
 
     try
