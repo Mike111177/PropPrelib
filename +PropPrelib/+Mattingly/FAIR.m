@@ -12,21 +12,21 @@ function [T, h, Pr, phi, Cp, R, gam, a] = FAIR(Item, f, T, h, Pr, phi)
             end
         case 2 %h is known
             if nargin>3
-                T = fminbnd(@(T)abs(h-findh(f,T)),0,5000);
+                T = fminbnd(@(T)abs(h-findh(f,T)),300,4000);
                 [h, Pr, phi, Cp, R, gam, a] = unFAIR(T, f);
             else
                 error('h must be defined for case 2');
             end
          case 3 %Pr is known
             if nargin>4
-                T = fminbnd(@(T)abs(Pr-findPr(f,T)),0,4000);
+                T = fminbnd(@(T)abs(Pr-findPr(f,T)),300,4000);
                 [h, Pr, phi, Cp, R, gam, a] = unFAIR(T, f);
             else
                 error('Pr must be defined for case 2');
             end
           case 4 %phi is known
             if nargin>5
-                T = fminbnd(@(T)abs(phi-findphi(f,T)),1, 3);
+                T = fminbnd(@(T)abs(phi-findphi(f,T)),300, 4000);
                 [h, Pr, phi, Cp, R, gam, a] = unFAIR(T, f);
             else
                 error(' must be defined for case 2');
@@ -77,16 +77,9 @@ function [Cp_a, h_a, phi_a] = AFPROP_A(T)
     A6 = -1.4526770E-21;
     A7 =  1.0115540E-25;
     h_ref  = -1.7558886; %BTU ./lbm
-    phi_r1 =  0.0454323; %BTU ./(lbm R)
+    phi_ref = 0.0454323; %BTU ./(lbm R)
     %====== Equations 2.60 ,2.61 , 2.62 for air alone ===========
-    Cp_a = A0 + A1.*T + A2.*T.^2 + A3.*T.^3 +...
-           A4.*T.^4 + A5.*T.^5 + A6.*T.^6 + A7.*T.^7;
-
-    h_a = h_ref + A0.*T + A1./1.*T.^2 + A2./2.*T.^3 + A3./4.*T.^4 +...
-          A4./5.*T.^5 + A5./6.*T.^6 + A6./7.*T.^7 + A7./8.*T.^8;
-
-    phi_a = phi_r1 + A0.*log(T) + A1.*T + A2./2.*T.^2 + A3./3.*T.^3 +...
-            A4./4.*T.^4 + A5./5.*T.^5 + A6./6.*T.^6 + A7./7.*T.^7;
+    [Cp_a, h_a, phi_a] = AFPROP(T, A0, A1, A2, A3, A4, A5, A6, A7, h_ref, phi_ref);
     %==============================================================
 end
 
@@ -101,15 +94,17 @@ function [Cp_p, h_p, phi_p] = AFPROP_P(T)
     A6 = -1.3335668E-20;
     A7 =  7.2678710E-25;
     h_ref  = 30.58153;  %BTU ./lbm
-    phi_r2 = 0.6483398; %BTU ./( lbm R)
+    phi_ref = 0.6483398; %BTU ./( lbm R)
+    [Cp_p, h_p, phi_p] = AFPROP(T, A0, A1, A2, A3, A4, A5, A6, A7, h_ref, phi_ref);
+end
 
-    %===== Equations 2.60 , 2.61 , 2.62 for products of combustion
-    Cp_p = A0 + A1.*T + A2.*T.^2 + A3.*T.^3 +...
+function [Cp, h, phi] = AFPROP(T, A0, A1, A2, A3, A4, A5, A6, A7, h_ref, phi_ref)
+    Cp = A0 + A1.*T + A2.*T.^2 + A3.*T.^3 +...
            A4.*T.^4 + A5.*T.^5 + A6.*T.^6 + A7.*T.^7;
 
-    h_p = h_ref + A0.*T + A1./1.*T.^2 + A2./2.*T.^3 + A3./4.*T.^4 +...
+    h = h_ref + A0.*T + A1./2.*T.^2 + A2./3.*T.^3 + A3./4.*T.^4 +...
           A4./5.*T.^5 + A5./6.*T.^6 + A6./7.*T.^7 + A7./8.*T.^8;
 
-    phi_p = phi_r2 + A0.*log(T) + A1.*T + A2./2.*T.^2 + A3./3.*T.^3 +...
+    phi = phi_ref + A0.*log(T) + A1.*T + A2./2.*T.^2 + A3./3.*T.^3 +...
             A4./4.*T.^4 + A5./5.*T.^5 + A6./6.*T.^6 + A7./7.*T.^7;
 end
