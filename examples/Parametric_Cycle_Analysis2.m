@@ -9,7 +9,7 @@ import PropPrelib.Mattingly.*
 units BE;
 
 
-ref.T_0 = 309.50;
+ref.T_0 = 390.51;
 ref.M0 = 1.6;
 
 %Diffisur
@@ -38,14 +38,14 @@ ref.Tt4 = 3000;
 ref.e_tH = 0.91;
 
 %LTurbine
-ref.e_tL = 0.910;
+ref.e_tL = 0.91;
 
 %Mixer
 ref.M6 = 0.4;
 ref.Pi_Mmax = 0.95;
 
 %Afterburner
-ref.Pi_AB = 0.960;
+ref.Pi_AB = 0.950;
 ref.Eta_AB = 0.970;
 ref.Tt7 = 3500;
 
@@ -55,7 +55,7 @@ ref.P0dP9 = 1;
 
 %AUX Air
 ref.Beta = 0.01;
-ref.Eps_1 = 0.01;
+ref.Eps_1 = 0.05;
 ref.Eps_2 = 0.05;
 
 %OTHER

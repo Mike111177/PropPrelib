@@ -7,67 +7,73 @@ import PropPrelib.*
 import PropPrelib.Mattingly.*
 
 units BE;
+atmodel Standard;
 
-
-ref.T_0 = 411.6;
-ref.M0 = 1.6;
+%Ambient
+[design.T_0, ~, design.P0] = atmos(30000);
+design.M0 = 1.6;
+design.C_pc = 0.238;  %Ignored in VSH mode
+design.gamma_c = 1.4; %Ignored in VSH mode
 
 %Diffisur
-ref.Pi_dmax = 0.97;
+design.Pi_dmax = 0.97;
 
 %Fan
-ref.alpha = 0.3;
-ref.Pi_f = 3.5;
-ref.e_f = 0.89;
+design.alpha = 0.3;
+design.Pi_f = 3.5;
+design.e_f = 0.89;
 
 %LCompressor
-ref.Pi_cL = 3.5;
-ref.e_cL = 0.89;
+design.Pi_cL = 3.5;
+design.e_cL = 0.89;
 
 %HCompressor
-ref.Pi_cH = 16/ref.Pi_cL;
-ref.e_cH = 0.89;
+design.Pi_cH = 16/design.Pi_cL;
+design.e_cH = 0.89;
 
 %Burner
-ref.h_Pr = 18000;
-ref.Eta_b = 0.980;
-ref.Pi_b = 0.970;
-ref.Tt4 = 3200;
-
+design.h_Pr = 18000;
+design.Eta_b = 0.980;
+design.Pi_b = 0.970;
+design.Tt4 = 3200;
 
 %HTurbine
-ref.e_tH = 0.890;
+design.e_tH = 0.890;
+design.C_pt = 0.295;  %Ignored in VSH mode
+design.gamma_t = 1.3; %Ignored in VSH mode
 
 %LTurbine
-ref.e_tL = 0.910;
+design.e_tL = 0.910;
 
 %Mixer
-ref.M6 = 0.4;
-ref.Pi_Mmax = 0.970;
+design.M6 = 0.4;
+design.Pi_Mmax = 0.970;
 
 %Afterburner
-ref.Pi_AB = 0.960;
-ref.Eta_AB = 0.970;
-ref.Tt7 = 3600;
+design.Pi_AB = 0.960;
+design.Eta_AB = 0.970;
+design.Tt7 = 3600;
+design.C_pAB = 0.295;  %Ignored in VSH mode
+design.gamma_AB = 1.3; %Ignored in VSH mode
 
 %Nozzle
-ref.Pi_n = 0.980;
-ref.P0dP9 = 1;
+design.Pi_n = 0.980;
+design.P0dP9 = 1;
 
 %AUX Air
-ref.Beta = 0.01;
-ref.Eps_1 = 0.05;
-ref.Eps_2 = 0.05;
+design.Beta = 0.01;
+design.Eps_1 = 0.05;
+design.Eps_2 = 0.05;
 
 %OTHER
-ref.Eta_mPL = 0.99;
-ref.Eta_mPH = 0.98;
-ref.Eta_mL = 0.98;
-ref.Eta_mH = 0.98;
-ref.CTOH = 0;
-ref.CTOL = 0.01;
-res = MFTEPCA(ref);
+design.Eta_mPL = 0.98;
+design.Eta_mPH = 0.98;
+design.Eta_mL = 0.99;
+design.Eta_mH = 0.98;
+design.CTOH = 0;
+design.CTOL = 0.01;
+ref = MFTEPCA(design, 1);
 fprintf('Input\n')
-ppstruct(ref);
+ppstruct(design);
 fprintf('Results\n')
-ppstruct(res);
+ppstruct(ref);

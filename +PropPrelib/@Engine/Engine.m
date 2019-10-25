@@ -8,24 +8,24 @@ classdef Engine
             import PropPrelib.EngineModels.*
             switch (type)
                 case 'LBTF'
-        
-                    cMax.A = 1;
-                    cMax.B = -3.5;
-                    cMax.C = 1;
-                    cMax.D = 1;
-                    %Eq 3.55b
-                    cMax.C1 = 1.6;
-                    cMax.C2 = 0.27;
-                    
-                    cMil.A = 0.6;
-                    cMil.B = -2.28;
-                    cMil.C = 1;
-                    cMil.D = 1;
-                    %Eq 3.55a
-                    cMil.C1 = 0.9;
-                    cMil.C2 = 0.30;
-                    
-                    e = EngineMaxMil(cMax, cMil);
+                    switch (nargin)
+                        case 1
+                            cMax.A = 1; cMax.B = -3.5;
+                            cMax.C = 1; cMax.D = 1;
+                            %Eq 3.55b
+                            cMax.C1 = 1.6;
+                            cMax.C2 = 0.27;
+
+                            cMil.A = 0.6; cMil.B = -2.28;
+                            cMil.C = 1; cMil.D = 1;
+                            %Eq 3.55a
+                            cMil.C1 = 0.9;
+                            cMil.C2 = 0.30;
+
+                            e = EngineMaxMil(cMax, cMil);
+                        case {2,3}
+                            e = LBTF(varargin{:});
+                    end
             end
         end
     end
