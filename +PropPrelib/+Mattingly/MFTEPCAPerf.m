@@ -1,4 +1,4 @@
-function performance = MFTEPCAPerf(design, control, reference)
+ function performance = MFTEPCAPerf(design, control, reference)
 BTU_to_ft_lb = 780;
 BTU_lbm_to_ft2_s2 = 25037.00;
 BTU_p_sec_to_KW = 1.055;

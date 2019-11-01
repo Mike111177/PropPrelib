@@ -1,11 +1,11 @@
 function ppstruct(s, indent)
+    import PropPrelib.formatVariables
     if nargin < 2
         indent = 0;
     end
     names = fieldnames(s);
     labels = string(names);
-    labels = strrep(labels, "__d", "/");
-    labels = strrep(labels, "_", " ");
+    labels = formatVariables(labels);
     labels = pad(labels, 'left');
     
     lines = cell(1,numel(names));

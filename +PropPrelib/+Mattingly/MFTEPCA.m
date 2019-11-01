@@ -4,6 +4,7 @@ BTU_lbm_to_ft2_s2 = 25037.00;
 BTU_p_sec_to_KW = 1.055;
 import PropPrelib.Mattingly.*
 import PropPrelib.gc
+import PropPrelib.atmos
 d = reference_design;
 
 if nargin == 1
@@ -13,6 +14,29 @@ end
 if heatmodel==3
     warning('Variable specific heat analysis is no0t complete! You may se incorrect or missing values')
 end
+
+if isfield(d, 'Pi_c')
+    if ~isfield(d, 'Pi_cH')
+        d.Pi_cH = d.Pi_c/d.Pi_cL;
+    end
+    if ~isfield(d, 'Pi_cL')
+        d.Pi_cL = d.Pi_c*d.Pi_cH;
+    end
+end
+
+if isfield(d, 'Alt')
+    has_T_0 = isfield(d, 'T_0');
+    has_P0 = isfield(d, 'P0');
+    if ~has_T_0 || ~has_P0
+        [tempT0, ~, tempP0] = atmos(d.Alt);
+        if ~has_T_0
+            d.T_0 = tempT0;
+        end
+        if ~has_P0
+            d.P0 = tempP0;
+        end
+    end
+end    
 
 r.hmodel = heatmodel;
 
@@ -342,6 +366,7 @@ switch (heatmodel)
         PTOdm = (r.PTOL__dmdot + r.PTOH__dmdot)/BTU_p_sec_to_KW/BTU_to_ft_lb;
         r.Eta_TH = (r.V0^2/(2*gc))*(kf+PTOdm)/(f_o*d.h_Pr*BTU_to_ft_lb); % 4.32b Modified
         r.Eta_P = 2*(r.F__dmdot*gc/r.V0)/kf;%(4.32a)
+        r.S = f_o/r.F__dmdot*3600;
     case 3 % Variable Specific Heat
         P_r9 = P_rt9*r.Pt9__dP9;
         [T_9, h_9, ~, phi_9, c_p9, R_9, gamma_9, a_9] = FAIR(3, f_o, NaN, NaN, P_r9);
