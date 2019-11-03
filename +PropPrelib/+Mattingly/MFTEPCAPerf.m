@@ -67,7 +67,7 @@ ht6A = ht5*Tau_mR %???
 f6A = f4.5(1 - ?)/(1 + ? - ?)
 [Tt6A, ~, Prt6A, phit6A, cpt6A, Rt6A, gammat6A, at6A] = FAIR(2, f6A, NaN, ht6A);
 FAIR (2, f6A, Tt6A, ht6A, Prt6A, ?t6A, cpt6A, Rt6A, ?t6A, at6A)
-    while true %Label 1
+while true %Label 1
     ht3 = ht0?cL?cH
     FAIR (2, 0, Tt3, ht3, Prt3, ?t3, cpt3, Rt3, ?t3, at3)
     ? = ?/ {(1 + f )(1 - ? - ?1 - ?2) + ?1 + ?2}
@@ -108,16 +108,16 @@ FAIR (2, f6A, Tt6A, ht6A, Prt6A, ?t6A, cpt6A, Rt6A, ?t6A, at6A)
     ht13i = ht2{1 + ? f (? f - 1)}
     ht2.5i = ht2{1 + ?cL(?cL - 1)}
     ht3i = ht2.5{1 + ?cH(?cH - 1)}
-    [Tt13  , ~, Prt13  , phit13  , cpt13  , Rt13  , gammat13  ,  at13 ] = FAIR(2, 0, NaN, ht13  );
+    [Tt13  , ~, Prt13  , phit13  , cpt13  , Rt13  , gammat13  , at13  ] = FAIR(2, 0, NaN, ht13  );
     [Tt13i , ~, Prt13i , phit13i , cpt13i , Rt13i , gammat13i , at13i ] = FAIR(2, 0, NaN, ht13i );
     [Tt2p5 , ~, Prt2p5 , phit2p5 , cpt2p5 , Rt2p5 , gammat2p5 , at2p5 ] = FAIR(2, 0, NaN, ht2p5 );
     [Tt2p5i, ~, Prt2p5i, phit2p5i, cpt2p5i, Rt2p5i, gammat2p5i, at2p5i] = FAIR(2, 0, NaN, ht2p5i);
     [Tt3   , ~, Prt3   , phit3   , cpt3   , Rt3   , gammat3   , at3   ] = FAIR(2, 0, NaN, ht3   );
     [Tt3i  , ~, Prt3i  , phit3i  , cpt3i  , Rt3i  , gammat3i  , at3i  ] = FAIR(2, 0, NaN, ht3i  );
-    Pi_f  = Prt13i  /Prt2
-    Pi_cL = Prt2p5i /Prt2
-    Pi_cH = Prt3i   /Prt2p5
-    Pi_c  = Pi_cL   *Pi_cH
+    Pi_f  = Prt13i  /Prt2;
+    Pi_cL = Prt2p5i /Prt2;
+    Pi_cH = Prt3i   /Prt2p5;
+    Pi_c  = Pi_cL   *Pi_cH;
     Tau_c = Tau_cL  *Tau_cH;
     while true %Label 2
         ftemp = p.f; 

@@ -36,7 +36,11 @@ if isfield(d, 'Alt')
             d.P0 = tempP0;
         end
     end
-end    
+end
+
+if ~isfield(d, 'AB')
+    d.AB = 1;
+end
 
 r.hmodel = heatmodel;
 
@@ -310,11 +314,13 @@ end
 Pi_Mideal = (1 + alpha_p)*sqrt(r.Tau_M)*A_6dA_6A*MFP_6/MFP_6A;
 r.Pi_M = d.Pi_Mmax*Pi_Mideal; %(H.15)
 
+Tt7 = T_t6A+(d.Tt7_max-T_t6A)*d.AB;
+
 % F_AB, f_7
 switch (heatmodel)
     case 1 % Constant Specific Heat
-       C_p7 = d.C_pAB;
-       Tau_LAB = (C_p7*d.Tt7)/(C_p0*d.T_0);
+       C_p7 = r.CP_M+(d.C_pAB-r.CP_M)*d.AB;
+       Tau_LAB = (C_p7*Tt7)/(C_p0*d.T_0);
        r.f_AB = (1+r.f*bee/(1+d.alpha-d.Beta))*...
            (Tau_LAB - r.Tau_L*r.Tau_m1*r.Tau_tH*r.Tau_m2*r.Tau_tL*r.Tau_M)/...
            (d.h_Pr*d.Eta_AB/h_0 - Tau_LAB); %(H.16)
@@ -322,7 +328,7 @@ switch (heatmodel)
     case 3 % Variable Specific Heat
         f7i = 0.0001;%initial
         while true
-               [~, h_t7, P_rt7, phi_t7, c_pt7, R_t7, gamma_t7, a_t7] = FAIR(1, f7i, d.Tt7); %Label C
+               [~, h_t7, P_rt7, phi_t7, c_pt7, R_t7, gamma_t7, a_t7] = FAIR(1, f7i, Tt7); %Label C
                Tau_LAB = h_t7/h_0;
                r.f_AB = (1+r.f*bee/(1+d.alpha-d.Beta))*...
                    (Tau_LAB - r.Tau_L*r.Tau_m1*r.Tau_tH*r.Tau_m2*r.Tau_tL*r.Tau_M)/...
@@ -338,7 +344,7 @@ switch (heatmodel)
 end
 
 f_o = f_7;
-T_t9 = d.Tt7; 
+T_t9 = Tt7; 
 
 r.Pt9__dP9 = d.P0dP9*r.Pi_r*r.Pi_d*d.Pi_cL*d.Pi_cH*d.Pi_b*r.Pi_tH*r.Pi_tL*r.Pi_M*d.Pi_AB*d.Pi_n;
 
