@@ -34,7 +34,7 @@ Take a look in the examples folder for specific use cases.
 * Drag Models AED 2nd. ed.
   - [x] Future Fighter
   - [x] Current Fighter
-  - [ ] AIAA Spring 2019 Supersonic Passenger Airliner Competition Drag Model
+  - [ ] AIAA 2019 Supersonic Passenger Airliner Competition Drag Model
 * Design Process
   - Constraint Analysis
     - [x] Thrust Loading/Wing Loading Conditions<sup>1</sup>
@@ -57,8 +57,8 @@ Take a look in the examples folder for specific use cases.
       - [ ] Constant Specific Heat
       - [ ] Modified Specific Heat
       - [ ] Variable Specific Heat **(WIP)**
-   - [ ] Installation Losses
-   - Engine Tuning For Mission
+   - Engine Tuning
+      - [ ] Installation Losses
       - [ ] Engine Scale
       - [ ] Engine Control
    - Optimization and Iterations
@@ -75,9 +75,9 @@ Take a look in the examples folder for specific use cases.
      - [x] Struct Pretty Printer
      - [x] Table Comparision Printer
    - Mattingly Subroutines
-     - [x] FAIR
-     - [x] MASSFP<sup>2</sup>
-     - [x] RGCOMPR<sup>2</sup>
+     - [x] FAIR<sup>3</sup>
+     - [x] MASSFP<sup>2,3</sup>
+     - [x] RGCOMPR<sup>2,3</sup>
      - [ ] TURB
      - [ ] TURBC
      - [ ] FAIR<sub>M</sub>
@@ -93,3 +93,8 @@ Take a look in the examples folder for specific use cases.
   * Analysis
     - [ ] Carpet Plots
     - [ ] Improved options for Mach/Altitude Plots
+    - [ ] Simulink?????
+  * General
+    - [ ] Better documentation
+    - [ ] Unit testing
+    - [ ] Implementation of better programming languages (C++, Python , etc...)
