@@ -9,7 +9,7 @@ classdef Engine
             switch (type)
                 case 'LBTF'
                     switch (nargin)
-                        case 1
+                        case 2
                             cMax.A = 1; cMax.B = -3.5;
                             cMax.C = 1; cMax.D = 1;
                             %Eq 3.55b
@@ -23,7 +23,7 @@ classdef Engine
                             cMil.C2 = 0.30;
 
                             e = EngineMaxMil(cMax, cMil);
-                        case {2,3}
+                        case {3,4}
                             e = LBTF(varargin{:});
                     end
             end
