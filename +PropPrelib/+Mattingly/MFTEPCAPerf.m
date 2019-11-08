@@ -57,39 +57,30 @@ p.Tau_f = r.Tau_f; p.Tau_cL = r.Tau_cL; p.Tau_cH = r.Tau_cH;
 p.Tau_m1 = r.Tau_m1; p.Tau_m2 = r.Tau_m2; p.f = r.f;
 p.M4 = 1; p.M4p5 = 1; p.M6A = r.M6A; p.M8 = r.M8;
 
-[~, ht4, Prt4, phit4, cpt4, Rt4, gammat4, at4] = FAIR (1, f, Tt4);
+[~, ht4, Prt4, phit4, cpt4, Rt4, gammat4, at4] = FAIR(1, f, Tt4);
 ht4p5 = ht4*p.Tau_m1*p.Tau_tH*p.Tau_m2;
 f4p5 = p.f*(1 - d.Beta - d.Eps1 - d.Eps2)/(1 - d.Beta);
 [Tt4p5i, ~, Prt4p5, phit4p5, cpt4p5, Rt4p5, gammat4p5, at4p5] = FAIR(2, f4p5, NaN, ht4p5);
 ht5 = ht4p5*Tau_tL;
 [Tt5i, ~, Prt5, phit5, cpt5, Rt5, gammat5, at5] = FAIR(2, f4p5, NaN, ht4p5);
-ht6A = ht5*r.Tau_m %???
-f6A = f4p5(1 - ?)/(1 + ? - ?)
+ht6A = ht5*r.Tau_M;
+f6A = f4p5(1 - r.Beta)/(1 + r.alpha - r.Beta);
 [Tt6A, ~, Prt6A, phit6A, cpt6A, Rt6A, gammat6A, at6A] = FAIR(2, f6A, NaN, ht6A);
-FAIR (2, f6A, Tt6A, ht6A, Prt6A, ?t6A, cpt6A, Rt6A, ?t6A, at6A)
 while true %Label 1
-    ht3 = ht0?cL?cH
-    FAIR (2, 0, Tt3, ht3, Prt3, ?t3, cpt3, Rt3, ?t3, at3)
-    ? = ?/ {(1 + f )(1 - ? - ?1 - ?2) + ?1 + ?2}
-    FAIR (1, f, Tt4, ht4, Prt4, ?t4, cpt4, Rt4, ?t4, at4)
-    f4.5 = f (1 - ? - ?1 - ?2)/(1 - ?)
-    TURBC (Tt4, f, A4/A4.5, M4, M4.5, ?tH, Tt4.5i, Tt3,?,?1, ?2, ?tH, ?tH, Tt4.5)
-    TURB (Tt4.5, f4.5, A4.5/A6, M4.5, M6, ?tL, Tt5i, ?tL, ?tL, Tt5)
-    ?? = ht4/h0
-
-    ? f = 1 +
-
-    (1 - ?tL)?mL
-    (1 - ? - ?1 - ?2) (1 + f )
-    ???tH
-    ?r
-    + (?1?tH + ?2) ?cL?cH 
-    - (1 + ?)
-    ?r?mPL
-    PTOL
-    m? 0h0
-     
-    × {(?cL - 1)R/(? f - 1)R + ?}
+    ht3 = ht0*p.Tau_cL*p.Tau_cH;
+    [Tt3, ~, Prt3, phit3, cpt3, Rt3, gammat3, at3] = FAIR(2, 0, NaN, ht3);
+    alpha_p = alpha/((1 + f)*(1 - Beta - Eps1 - Eps2) + Eps1 + Eps2);
+    [~, ht4, Prt4, phit4, cpt4, Rt4, gammat4, at4] = FAIR(1, f, Tt4);
+    f4p5 = f*(1 - Beta - Eps1 - Eps2)/(1 - Beta);
+    TURBC(Tt4, f, A4/A4p5, M4, M4p5, ?tH, Tt4p5i, Tt3,?,?1, ?2, ?tH, ?tH, Tt4p5)
+    TURB(Tt4p5, f4p5, A4p5/A6, M4p5, M6, ?tL, Tt5i, ?tL, ?tL, Tt5)
+    Tau_L = ht4/h0;
+    Tau_f = 1 + (...
+                (1 - Tau_tL)*Eta_mL*(...
+                    (1-Beta-Eps1-Eps2)*(1+f)*(Tau_L*Tau_tH/Tau_r)+...
+                    (Eps1*Tau_tH + Eps2)*Tau_cL*Tau_cH)...
+                 - (1+alpha)/(Tau_r*Eta_mPL)*PTOL/(mdot0*h0))...
+            *((r.Tau_cL-1)/(r.Tau_f-1)+alpha);
     ?cL = 1 + (? f - 1)(?cL - 1)R
     (? f - 1)R
     ?cH = 1 + (1 - ?tH) ?mH 
@@ -104,9 +95,9 @@ while true %Label 1
     Prt2 = Prt0
     ht13 = ht2? f
     ht2p5 = ht2?cL
-    ht3 = ht2.5?cH
+    ht3 = ht2p5?cH
     ht13i = ht2{1 + ? f (? f - 1)}
-    ht2.5i = ht2{1 + ?cL(?cL - 1)}
+    ht2p5i = ht2{1 + ?cL(?cL - 1)}
     ht3i = ht2.5{1 + ?cH(?cH - 1)}
     [Tt13  , ~, Prt13  , phit13  , cpt13  , Rt13  , gammat13  , at13  ] = FAIR(2, 0, NaN, ht13  );
     [Tt13i , ~, Prt13i , phit13i , cpt13i , Rt13i , gammat13i , at13i ] = FAIR(2, 0, NaN, ht13i );
@@ -133,9 +124,9 @@ while true %Label 1
     ht16 = ht13
     Tt16 = Tt13
     Pt6 = P0 ?r ?d ?cL ?cH ?b ?tH ?tL
-    f4.5 = f (1 - ? - ?1 - ?2)/(1 - ?)
+    f4p5 = f (1 - ? - ?1 - ?2)/(1 - ?)
 
-    RGCOMPR (1, Tt6, M6, f4.5, TtT, PtP, MFP6)
+    RGCOMPR (1, Tt6, M6, f4p5, TtT, PtP, MFP6)
     P6 = Pt6/PtP
     T6 = Tt6/TtT
     Pt16 = P0?r?d? f
@@ -205,7 +196,7 @@ while true %Label 1
         [~, TtdT_6A, PtdP_6A, MFP_6A] = RGCOMPR(1, T_t6A, M6Ai, f_6A);
         T6A = Tt6A
         TtT6A
-        FAIR (1, f6A, T6A, h6A, Pr6A, ?6A, cp6A, R6A, ?6A, a6A)
+        [~, h6A, Pr6A, phi6A, cp6A, R6A, gamma6A, a6A] = FAIR(1, f6A, T6A);
         M6Anew =
 
          R6AT6A
@@ -339,13 +330,12 @@ V9/a0
 (1 - P0/P9)
 ?0
 
-S = fo
-F/m? 0
+S = fo*(F/mdot0)
 F = m? 0
  F
 m? 0
 
-RGCOMPR (1, Tt0, M0, 0, TtT, PtP, MFP0)
+[TtT, PtP, MFP0] = RGCOMPR (1, Tt0, M0, 0);
 A0 = m? 0
 ?Tt0
 Pt0MFP0
