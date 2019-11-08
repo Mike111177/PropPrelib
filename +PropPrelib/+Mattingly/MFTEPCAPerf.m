@@ -58,13 +58,13 @@ p.Tau_m1 = r.Tau_m1; p.Tau_m2 = r.Tau_m2; p.f = r.f;
 p.M4 = 1; p.M4p5 = 1; p.M6A = r.M6A; p.M8 = r.M8;
 
 [~, ht4, Prt4, phit4, cpt4, Rt4, gammat4, at4] = FAIR (1, f, Tt4);
-ht4p5 = ht4?m1?tH?m2
-f4p5 = f (1 - ? - ?1 - ?2)/(1 - ?);
+ht4p5 = ht4*p.Tau_m1*p.Tau_tH*p.Tau_m2;
+f4p5 = p.f*(1 - d.Beta - d.Eps1 - d.Eps2)/(1 - d.Beta);
 [Tt4p5i, ~, Prt4p5, phit4p5, cpt4p5, Rt4p5, gammat4p5, at4p5] = FAIR(2, f4p5, NaN, ht4p5);
 ht5 = ht4p5*Tau_tL;
 [Tt5i, ~, Prt5, phit5, cpt5, Rt5, gammat5, at5] = FAIR(2, f4p5, NaN, ht4p5);
-ht6A = ht5*Tau_mR %???
-f6A = f4.5(1 - ?)/(1 + ? - ?)
+ht6A = ht5*r.Tau_m %???
+f6A = f4p5(1 - ?)/(1 + ? - ?)
 [Tt6A, ~, Prt6A, phit6A, cpt6A, Rt6A, gammat6A, at6A] = FAIR(2, f6A, NaN, ht6A);
 FAIR (2, f6A, Tt6A, ht6A, Prt6A, ?t6A, cpt6A, Rt6A, ?t6A, at6A)
 while true %Label 1
@@ -103,7 +103,7 @@ while true %Label 1
     ht2 = ht0
     Prt2 = Prt0
     ht13 = ht2? f
-    ht2.5 = ht2?cL
+    ht2p5 = ht2?cL
     ht3 = ht2.5?cH
     ht13i = ht2{1 + ? f (? f - 1)}
     ht2.5i = ht2{1 + ?cL(?cL - 1)}

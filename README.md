@@ -79,12 +79,13 @@ Take a look in the examples folder for specific use cases.
      - [x] MASSFP<sup>2,3</sup>
      - [x] RGCOMPR<sup>2,3</sup>
      - [ ] TURB
-     - [ ] TURBC
+     - [x] TURBC <sup>3,4</sup>
      - [ ] FAIR<sub>M</sub>
      
 <sup>1: Not fully implemented for every input case.</sup><br>
 <sup>2: Current Implementation may be innacurate depending in inputs.</sup><br>
-<sup>3: Current Implementation does not correctly handle SI units.</sup>
+<sup>3: Current Implementation does not correctly handle SI units.</sup><br>
+<sup>4: Current Implementation has not been tested thoroughly either due to insufficent integration or due to insufficent example data.</sup>
   
 ### Potential Future Considerations
   * Integration with AEDsys
