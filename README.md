@@ -78,8 +78,8 @@ Take a look in the examples folder for specific use cases.
      - [x] FAIR<sup>3</sup>
      - [x] MASSFP<sup>2,3</sup>
      - [x] RGCOMPR<sup>2,3</sup>
-     - [ ] TURB
-     - [x] TURBC <sup>3,4</sup>
+     - [x] TURB<sup>3,4</sup>
+     - [x] TURBC<sup>3,4</sup>
      - [ ] FAIR<sub>M</sub>
      
 <sup>1: Not fully implemented for every input case.</sup><br>
