@@ -56,6 +56,8 @@ p.Pi_f = d.Pi_f; p.Pi_cL = d.Pi_cL; p.Pi_cH = d.Pi_cH;
 p.Tau_f = r.Tau_f; p.Tau_cL = r.Tau_cL; p.Tau_cH = r.Tau_cH;
 p.Tau_m1 = r.Tau_m1; p.Tau_m2 = r.Tau_m2; p.f = r.f;
 p.M4 = 1; p.M4p5 = 1; p.M6A = r.M6A; p.M8 = r.M8;
+%Initial Estimations
+alpha = d.alpha*(c.T_0/d.T_0)*(p.Tau_r/r.Tau_r); % EQ (5.19d) 2nd. Ed
 
 [~, ht4, Prt4, phit4, cpt4, Rt4, gammat4, at4] = FAIR(1, p.f, c.Tt4); %Should this be iterated?
 ht4p5 = ht4*p.Tau_m1*p.Tau_tH*p.Tau_m2;
