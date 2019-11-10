@@ -52,14 +52,14 @@ switch (heatmodel)
         C_p0 = d.C_pc;
         gamma_0 = d.gamma_c;
         r.a0 = sqrt(d.gamma_c*R_c*d.T_0*gc*BTU_to_ft_lb);
-        h_0 = d.C_pc*d.T_0;
+        r.h_0 = d.C_pc*d.T_0;
     case 3
-        [~, h_0, P_r0, phi_0, C_p0, R_0, gamma_0, r.a0] = FAIR(1, 0, d.T_0);
+        [~, r.h_0, P_r0, phi_0, C_p0, R_0, gamma_0, r.a0] = FAIR(1, 0, d.T_0);
 end
 
 r.V0 = d.M0*r.a0;
-r.PTOL__dmdot = h_0*d.CTOL*BTU_p_sec_to_KW;
-r.PTOH__dmdot = h_0*d.CTOH*BTU_p_sec_to_KW;
+r.PTOL__dmdot = r.h_0*d.CTOL*BTU_p_sec_to_KW;
+r.PTOH__dmdot = r.h_0*d.CTOH*BTU_p_sec_to_KW;
 
 %Tau R, Pi R
 switch (heatmodel)
@@ -68,23 +68,16 @@ switch (heatmodel)
         r.Pi_r = r.Tau_r^(gamma_0/(gamma_0-1)); % 4.5b-CPG
         T_t0 = d.T_0*r.Tau_r;
     case 3 % Variable Specific Heat   
-        h_t0 = h_0 + (r.V0^2)/(2*gc)/BTU_to_ft_lb;
+        h_t0 = r.h_0 + (r.V0^2)/(2*gc)/BTU_to_ft_lb;
         [T_t0, ~, P_rt0, phi_t0, c_pt0, R_t0, gamma_t0, a_t0] = FAIR(2, 0, NaN, h_t0);
-        r.Tau_r = h_t0/h_0;  % 4.5a
+        r.Tau_r = h_t0/r.h_0;  % 4.5a
         r.Pi_r = P_rt0/P_r0; % 4.5b
 end
 
 P_t0 = d.P0*r.Pi_r;
         
-% eta_Rspec, Pi_d
-if d.M0 <= 1
-    eta_Rspec = 1;
-elseif d.M0 <= 5
-    eta_Rspec = 1-0.075*(d.M0 - 1)^1.35;
-else
-    eta_Rspec = 800/(d.M0^4 + 935);
-end
-r.Pi_d = d.Pi_dmax * eta_Rspec;
+
+r.Pi_d = d.Pi_dmax * Eta_Rspec(d.M0);
 
 P_t2 = P_t0*r.Pi_d;
 
@@ -139,7 +132,7 @@ end
 switch (heatmodel)
     case 1 % Constant Specific Heat
         r.Tau_L = (d.C_pt*d.Tt4)/(C_p0*d.T_0);  % 4.6c-CPG
-        r.f = (r.Tau_L - r.Tau_r*r.Tau_cL*r.Tau_cH)/(d.h_Pr*d.Eta_b/h_0 - r.Tau_L);
+        r.f = (r.Tau_L - r.Tau_r*r.Tau_cL*r.Tau_cH)/(d.h_Pr*d.Eta_b/r.h_0 - r.Tau_L);
     case 3 % Variable Specific Heat
         f4i = 0.0001;%initial
         while true
@@ -151,7 +144,7 @@ switch (heatmodel)
                end
                break;
         end
-        r.Tau_L = h_t4/h_0;
+        r.Tau_L = h_t4/r.h_0;
 end
 
 bee = (1 - d.Beta - d.Eps_1 - d.Eps_2);
@@ -323,16 +316,16 @@ switch (heatmodel)
        Tau_LAB = (C_p7*Tt7)/(C_p0*d.T_0);
        r.f_AB = (1+r.f*bee/(1+d.alpha-d.Beta))*...
            (Tau_LAB - r.Tau_L*r.Tau_m1*r.Tau_tH*r.Tau_m2*r.Tau_tL*r.Tau_M)/...
-           (d.h_Pr*d.Eta_AB/h_0 - Tau_LAB); %(H.16)
+           (d.h_Pr*d.Eta_AB/r.h_0 - Tau_LAB); %(H.16)
        f_7 = f_6A + r.f_AB;
     case 3 % Variable Specific Heat
         f7i = 0.0001;%initial
         while true
                [~, h_t7, P_rt7, phi_t7, c_pt7, R_t7, gamma_t7, a_t7] = FAIR(1, f7i, Tt7); %Label C
-               Tau_LAB = h_t7/h_0;
+               Tau_LAB = h_t7/r.h_0;
                r.f_AB = (1+r.f*bee/(1+d.alpha-d.Beta))*...
                    (Tau_LAB - r.Tau_L*r.Tau_m1*r.Tau_tH*r.Tau_m2*r.Tau_tL*r.Tau_M)/...
-                   (d.h_Pr*d.Eta_AB/h_0 - Tau_LAB); %(H.16)
+                   (d.h_Pr*d.Eta_AB/r.h_0 - Tau_LAB); %(H.16)
                f_7 = f_6A + r.f_AB;
                if abs(f_7-f7i)>0.0001
                    f7i = f_7;

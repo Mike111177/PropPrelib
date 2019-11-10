@@ -3,6 +3,8 @@ function [M, TtdT, PtdP, MFP] = RGCOMPR (Item, Tt, M, f, TtdT, PtdP, MFP)
 % Inputs: Item, Tt, f, and one of the following: M, Tt/T, Pt/P, and MFP
 % Outputs: M, Tt/T, Pt/P, and MFP
 import PropPrelib.Mattingly.*
+import PropPrelib.gc
+BTU_to_ft_lb = 780;
 switch (Item)
     case 1 % Mach known
         [TtdT, PtdP, MFP] = MASSFP(Tt, f, M);
@@ -15,7 +17,7 @@ switch (Item)
             Pr = Prt/PtdP;
             [T, h, Pr, phi, cp, R, gamma, a] = FAIR(3, f, NaN, NaN, Pr);
         end
-        Vp2 = 2*(ht - h)*gc;
+        Vp2 = 2*(ht - h)*gc*BTU_to_ft_lb;
         if Vp2 < 0
             M = 0;
             T = Tt;
@@ -33,7 +35,7 @@ switch (Item)
         [TtdT, PtdP, MFP_0] = MASSFP(Tt, f, M);
         while true %Label 4.... yes he uses goto statements
             M = M + dM; 
-            MASSFP (Tt, f, M, TtdT, Pt/P, MFP_n);
+            [TtdT, PtdP, MFP_n] = MASSFP (Tt, f, M);
             MFP_error = abs(MFP_n - MFP_0);
             if MFP_error > 0.00001
                 dM = (MFP - MFP_n)/(MFP_n - MFP_0)*dM;
