@@ -52,7 +52,7 @@ design.Pi_Mmax = 0.970;
 %Afterburner
 design.Pi_AB = 0.960;
 design.Eta_AB = 0.970;
-design.Tt7 = 3600;
+design.Tt7_max = 3600;
 design.C_pAB = 0.295;  %Ignored in VSH mode
 design.gamma_AB = 1.3; %Ignored in VSH mode
 
