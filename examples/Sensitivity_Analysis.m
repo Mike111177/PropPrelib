@@ -87,6 +87,6 @@ ABon = funcSens(@MFTEPCA,design,...
 %Afterburner on
 ABoff = funcSens(@MFTEPCAABOff,design,...`
                 {'Tt4',        'Pi_c', 'Pi_f', 'alpha', 'M6', 'P0dP9', 'M0', 'Alt'},...
-                {'F__dmdot', 'S'}, 0.05);
+                {'F__dmdot', 'S'}, 0.1);
               
 printDoubleTable({'Military Power','Max Power'}, {ABoff,  ABon});

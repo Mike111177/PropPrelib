@@ -1,9 +1,6 @@
-function mfp = MFP(M, R, gamma)
-% Equation 1.3
-if nargin == 2
-    gamma = 1.4;
+function [TtdT, PtdP, MFP] = MFP(M, gamma, R)
+    import PropPrelib.gc
+    TtdT = 1+(gamma-1)/2*M^2;
+    PtdP = TtdT^(gamma/(gamma-1));
+    MFP = M*sqrt(gamma*gc/R)*sqrt(TtdT/PtdP);
 end
-mf = 1+(gamma-1)/2.*M.^2;
-mfp = M.*sqrt(gamma*32.2/R).*mf.^((gamma+1)/(2*(1-gamma)));
-end
-

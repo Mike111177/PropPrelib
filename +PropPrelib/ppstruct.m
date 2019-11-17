@@ -8,11 +8,12 @@ function ppstruct(s, indent)
     labels = formatVariables(labels);
     labels = pad(labels, 'left');
     
-    lines = cell(1,numel(names));
+    c = 1;
     for k = 1:numel(names)
         value = s.(names{k});
         if isnumeric(value) && isscalar(value)
-            lines{k} = sprintf('%s: %.4g', labels{k}, value);
+            lines{c} = sprintf('%s: %.4g', labels{k}, value);
+            c = c+1;
         end
     end
     istr = blanks(indent);

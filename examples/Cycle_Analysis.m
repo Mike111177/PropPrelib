@@ -4,13 +4,13 @@ clc
 addpath("..")% Not needed if +PropPrelib folder is in your current path.
 
 import PropPrelib.*
-import PropPrelib.Mattingly.*
+import PropPrelib.Mattingly.MixedFlowTurboFan.CSH.*
 
 units BE;
 atmodel Standard;
 
 %Ambient
-[design.T_0, ~, design.P0] = atmos(30000);
+design.Alt = 30000;
 design.M0 = 1.6;
 design.C_pc = 0.238;  %Ignored in VSH mode
 design.gamma_c = 1.4; %Ignored in VSH mode
@@ -52,7 +52,7 @@ design.Pi_Mmax = 0.970;
 %Afterburner
 design.Pi_AB = 0.960;
 design.Eta_AB = 0.970;
-design.Tt7_max = 3600;
+design.Tt7 = 3600;
 design.C_pAB = 0.295;  %Ignored in VSH mode
 design.gamma_AB = 1.3; %Ignored in VSH mode
 
@@ -72,8 +72,20 @@ design.Eta_mL = 0.99;
 design.Eta_mH = 0.98;
 design.CTOH = 0;
 design.CTOL = 0.01;
-ref = MFTEPCA(design, 1);
+design.mdot0 = 100;
+
+%Controls
+control.Alt = 20000;
+control.M0 = 0.5;
+control.Tt4 = 3000;
+control.Tt7 = 3400;
+control.Pi_c_max = 15;
+
 fprintf('Input\n')
 ppstruct(design);
+
+[perf, ref] = MFTEPCA(design, control);
 fprintf('Results\n')
 ppstruct(ref);
+fprintf('Performance\n')
+ppstruct(perf);
